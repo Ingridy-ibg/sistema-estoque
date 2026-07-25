@@ -8,6 +8,7 @@ interface Produto {
   quantidade_atual: string;
   quantidade_minima: string;
   preco_unitario: string;
+  categorias: { nome: string } | null;
 }
 
 export async function clientLoader() {
@@ -28,6 +29,7 @@ export default function ListaProdutos() {
         <thead>
           <tr style={{ textAlign: "left", borderBottom: "1px solid #ccc" }}>
             <th>Nome</th>
+            <th>Categoria</th>
             <th>Qtd. atual</th>
             <th>Qtd. mínima</th>
             <th>Preço unitário</th>
@@ -46,6 +48,7 @@ export default function ListaProdutos() {
                 }}
               >
                 <td>{produto.nome}</td>
+                <td>{produto.categorias?.nome ?? "—"}</td>
                 <td>{produto.quantidade_atual} {produto.unidade_medida}</td>
                 <td>{produto.quantidade_minima}</td>
                 <td>R$ {produto.preco_unitario}</td>
