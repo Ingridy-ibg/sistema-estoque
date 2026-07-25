@@ -1,0 +1,19 @@
+# Dependências
+node_modules/
+
+# Variáveis de ambiente — nunca versionar segredos
+.env
+.env.*
+
+# Saídas de build
+api/dist/
+api/src/generated/
+web/build/
+web/.react-router/
+
+# Editor / SO
+.vscode/
+.DS_Store
+
+# Logs
+*.log
