@@ -11,17 +11,9 @@ export async function clientLoader() {
 
 export default function Dashboard() {
   return (
-    <div style={{ padding: 40, fontFamily: "sans-serif" }}>
+    <div>
       <h1>Painel do estoque</h1>
       <p>Login funcionou!</p>
-      <button
-        onClick={() => {
-          clearToken();
-          window.location.href = "/login";
-        }}
-      >
-        Sair
-      </button>
     </div>
   );
 }
