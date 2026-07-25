@@ -5,6 +5,8 @@ export default [
     layout("routes/protected-layout.tsx", [
     index("routes/dashboard.tsx"),
     route("produtos", "routes/produtos/lista.tsx"),
+     route("produtos/novo", "routes/produtos/novo.tsx"),
+    route("produtos/:id/editar", "routes/produtos/editar.tsx"),
     ]),
     
 
