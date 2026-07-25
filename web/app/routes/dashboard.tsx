@@ -13,7 +13,7 @@ export default function Dashboard() {
   return (
     <div style={{ padding: 40, fontFamily: "sans-serif" }}>
       <h1>Painel do estoque</h1>
-      <p>Login funcionou! O resto do painel vem na próxima mensagem.</p>
+      <p>Login funcionou!</p>
       <button
         onClick={() => {
           clearToken();
