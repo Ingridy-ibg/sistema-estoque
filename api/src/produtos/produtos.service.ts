@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateProdutoDto } from './dto/create-produto.dto';
 import { UpdateProdutoDto } from './dto/update-produto.dto';
@@ -13,8 +13,20 @@ export class ProdutosService {
     return this.prisma.produtos.create({ data: createProdutoDto });
   }
 
-  findAll() {
+  findAll(categoriaId?: string) {
+    let where: { categoria_id? : number| null } | undefined;
+
+    if (categoriaId === 'sem' ) {
+      where = { categoria_id: null };
+    }else if (categoriaId){
+      const id = Number(categoriaId);
+      if (Number.isNaN(id)){
+        throw new BadRequestException('categoria_id invalido');
+      }
+      where = { categoria_id: id };
+    }
     return this.prisma.produtos.findMany({
+      where,
     include: { categorias: { select: { nome: true } } },
   });
   }

@@ -1,5 +1,6 @@
-import { Link, useLoaderData } from "react-router";
+import { Link, useLoaderData, useSubmit, Form } from "react-router";
 import { apiFetch } from "../../lib/api-client";
+import type { Route } from "./+types/lista";
 
 interface Produto {
   id: number;
@@ -11,13 +12,26 @@ interface Produto {
   categorias: { nome: string } | null;
 }
 
-export async function clientLoader() {
-  const produtos: Produto[] = await apiFetch("/produtos");
-  return { produtos };
+interface Categoria {
+  id: number;
+  nome: string;
 }
 
+export async function clientLoader( { request }: Route.ClientLoaderArgs) {
+  const url = new URL(request.url);
+  const categoriaId = url.searchParams.get("categoria_id") ?? "";
+
+  const [produtos, categorias] = await Promise.all([
+    apiFetch(`/produtos${categoriaId ? `?categoria_id=${categoriaId}` : ""}`),
+    apiFetch("/categorias"),
+  ]);
+  return { produtos: produtos as Produto[], categorias: categorias as Categoria[], categoriaId };
+
+} 
+
 export default function ListaProdutos() {
-  const { produtos } = useLoaderData<typeof clientLoader>();
+  const { produtos, categorias, categoriaId } = useLoaderData<typeof clientLoader>();
+  const submit = useSubmit();
 
   return (
     <div>
@@ -25,6 +39,19 @@ export default function ListaProdutos() {
         <h1>Produtos</h1>
         <Link to="/produtos/novo">+ Novo produto</Link>
       </div>
+
+        <Form method="get" onChange={(e) => submit(e.currentTarget)} style={{ marginTop: 16 }}>
+        <label htmlFor="categoria_id">Filtrar por categoria: </label>
+        <select id="categoria_id" name="categoria_id" defaultValue={categoriaId}>
+          <option value="">Todas</option>
+           <option value="sem">Sem categoria</option>
+          {categorias.map((c) => (
+            <option key={c.id} value={c.id}>{c.nome}</option>
+          ))}
+        </select>
+      </Form>
+
+
       <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 16 }}>
         <thead>
           <tr style={{ textAlign: "left", borderBottom: "1px solid #ccc" }}>
@@ -58,6 +85,9 @@ export default function ListaProdutos() {
           })}
         </tbody>
       </table>
+
+      {produtos.length === 0 && <p>Nenhum produto nessa categoria.</p>}
+
     </div>
   );
 }
