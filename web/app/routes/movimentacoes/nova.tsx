@@ -1,6 +1,7 @@
 import { redirect, useLoaderData, useActionData, useNavigation, Form } from "react-router";
 import { apiFetch } from "../../lib/api-client";
 import type { Route } from "./+types/nova";
+import { useState } from "react";
 
 interface Produto {
   id: number;
@@ -38,6 +39,10 @@ export default function NovaMovimentacao() {
   const actionData = useActionData<typeof clientAction>();
   const navigation = useNavigation();
   const enviando = navigation.state === "submitting";
+  const [ busca, setBusca ] = useState("");
+
+  const produtosFiltrados = produtos.filter((p) => p.nome.toLowerCase().includes(busca.toLowerCase()),
+);
 
   return (
     <div>
@@ -45,14 +50,25 @@ export default function NovaMovimentacao() {
       <Form method="post">
         <div>
           <label htmlFor="produto_id">Produto</label><br />
-          <select id="produto_id" name="produto_id" required>
-            <option value="">Selecione um produto</option>
-            {produtos.map((p) => (
+          <div><label htmlFor="busca">Buscar produto</label><br /> 
+          <input
+          id= "busca"
+          type= "text"
+          value= {busca}
+          onChange={(e) => setBusca(e.target.value)}
+          placeholder="digite aqui"
+          />
+          </div>
+          <div style = {{marginTop: 12 }}>
+            <label htmlFor= "produto_id">Produto</label><br />
+          <select id="produto_id" name="produto_id"  size={5} required>
+            {produtosFiltrados.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.nome} (atual: {p.quantidade_atual} {p.unidade_medida})
               </option>
             ))}
           </select>
+          </div>
         </div>
         <div style={{ marginTop: 12 }}>
           <label htmlFor="tipo">Tipo</label><br />
