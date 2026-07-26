@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
@@ -12,7 +12,10 @@ export class CategoriasService {
   }
 
   findAll() {
-    return this.prisma.categorias.findMany();
+    return this.prisma.categorias.findMany({ 
+      orderBy: {nome: 'asc'},
+        include: { _count: { select: { produtos: true } } },
+    });
   }
 
   findOne(id: number) {
@@ -27,7 +30,19 @@ export class CategoriasService {
     });
   }
 
-  remove(id: number) {
-    return this.prisma.categorias.delete({ where: { id }});
+  async remove(id: number) {
+    const categoria = await this.prisma.categorias.findUnique({ where: { id },
+    include: { _count: { select: {produtos: true}}},
+  });
+
+  if (!categoria){
+    throw new NotFoundException(`Categria ${id} não existe`);
+  }
+
+    if (categoria._count.produtos > 0){
+
+  throw new BadRequestException(`Não é possível excluir essa categoria. ${categoria._count.produtos} produto(s) ainda estão ligadas à ela.`);    
+  }
+  return this.prisma.categorias.delete({ where: { id }});
   }
 }

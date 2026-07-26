@@ -22,6 +22,7 @@ export default function ProtectedLayout (){
             }}
             >
                 <Link to="/">Painel</Link>
+                <Link to="/categorias">Categorias</Link>
                 <Link to="/produtos">Produtos</Link>
                 <Link to="/movimentacoes/nova">Nova Movimentação</Link>
                 <button 
