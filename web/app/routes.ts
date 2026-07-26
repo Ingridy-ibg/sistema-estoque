@@ -7,6 +7,7 @@ export default [
     route("produtos", "routes/produtos/lista.tsx"),
      route("produtos/novo", "routes/produtos/novo.tsx"),
     route("produtos/:id/editar", "routes/produtos/editar.tsx"),
+    route("movimentacoes/nova", "routes/movimentacoes/nova.tsx"),
     ]),
     
 
