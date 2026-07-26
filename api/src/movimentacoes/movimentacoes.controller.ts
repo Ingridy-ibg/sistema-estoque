@@ -1,8 +1,7 @@
-import { Controller, Get, Post, Body, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, ParseIntPipe, UseGuards, Req} from '@nestjs/common';
+import type { Request } from 'express';
 import { MovimentacoesService } from './movimentacoes.service';
 import { CreateMovimentacoeDto } from './dto/create-movimentacoe.dto';
-import { UpdateMovimentacoeDto } from './dto/update-movimentacoe.dto';
-import { UseGuards } from '@nestjs/common';
 import {JwtAuthGuard} from '../auth/jwt-auth.guard';
 
 @UseGuards(JwtAuthGuard)
@@ -11,8 +10,9 @@ export class MovimentacoesController {
   constructor(private readonly movimentacoesService: MovimentacoesService) {}
 
   @Post()
-  create(@Body() createMovimentacoeDto: CreateMovimentacoeDto) {
-    return this.movimentacoesService.create(createMovimentacoeDto);
+  create(@Body() createMovimentacoeDto: CreateMovimentacoeDto, @Req() request: Request) {
+    const usuarioId = (request['usuario'] as { sub: number }).sub;
+    return this.movimentacoesService.create(createMovimentacoeDto, usuarioId);
   }
 
   @Get()

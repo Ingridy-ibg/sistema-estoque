@@ -6,23 +6,18 @@ import { CreateMovimentacoeDto } from './dto/create-movimentacoe.dto';
 export class MovimentacoesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createMovimentacoeDto: CreateMovimentacoeDto) {
+  async create(createMovimentacoeDto: CreateMovimentacoeDto, usuario_id: number) {
+    const { produto_id, tipo, quantidade, motivo } = createMovimentacoeDto;
 
-    const { produto_id, usuario_id, tipo, quantidade, motivo } = createMovimentacoeDto;
     return this.prisma.$transaction(async (tx) => {
-      const produto = await tx.produtos.findUnique({ where: {id: produto_id}});
-      if (!produto){
+      const produto = await tx.produtos.findUnique({ where: { id: produto_id } });
+      if (!produto) {
         throw new NotFoundException(`Produto ${produto_id} não existe`);
       }
 
-      const usuario = await tx.usuarios.findUnique({where: { id: usuario_id } });
-      if (!usuario){
-        throw new NotFoundException(`Usuário ${usuario_id} não existe`);
-      }
-
-      if(tipo === 'saida' && Number(produto.quantidade_atual) < quantidade){
+      if (tipo === 'saida' && Number(produto.quantidade_atual) < quantidade) {
         throw new BadRequestException(
-          `Estoque insuficiente para "${produto.nome}: disponível "${produto.quantidade_atual}", solicitado ${quantidade}.`,
+          `Estoque insuficiente para "${produto.nome}": disponível ${produto.quantidade_atual}, solicitado ${quantidade}.`,
         );
       }
 
@@ -30,25 +25,23 @@ export class MovimentacoesService {
         where: { id: produto_id },
         data: {
           quantidade_atual:
-            tipo === 'entrada' ? { increment: quantidade} : { decrement: quantidade },
+            tipo === 'entrada' ? { increment: quantidade } : { decrement: quantidade },
         },
       });
 
       return tx.movimentacoes.create({
-        data: { produto_id, usuario_id, tipo, quantidade, motivo},
+        data: { produto_id, usuario_id, tipo, quantidade, motivo },
       });
     });
   }
 
   findAll() {
     return this.prisma.movimentacoes.findMany({
-      orderBy: { criado_em: 'desc'},
+      orderBy: { criado_em: 'desc' },
     });
-
   }
 
   findOne(id: number) {
-    return this.prisma.movimentacoes.findUnique({where: {id}});
+    return this.prisma.movimentacoes.findUnique({ where: { id } });
   }
-
 }

@@ -14,10 +14,6 @@ export class CreateMovimentacoeDto {
     @IsPositive()
     produto_id: number;
 
-    @IsInt()
-    @IsPositive()
-    usuario_id: number;
-
     @IsIn(['entrada', 'saida'])
     tipo: string;
 
