@@ -43,7 +43,7 @@ export default function Login(){
                     <input id= "senha" name="senha" type="password" required/>
                 </div>
                 {actionData?.erro && (
-                    <p style={{ color: "red"}}>{actionData.erro}</p>
+                    <p className="erro">{actionData.erro}</p>
                 )}
                 <button type = "submit" disabled={enviando} style={{ marginTop: 16 }}>
                     {enviando ? "Entrando..." : "Entrar"}

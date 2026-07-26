@@ -54,14 +54,12 @@ export default function ListaProdutos() {
 
       <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 16 }}>
         <thead>
-          <tr style={{ textAlign: "left", borderBottom: "1px solid #ccc" }}>
             <th>Nome</th>
             <th>Categoria</th>
             <th>Qtd. atual</th>
             <th>Qtd. mínima</th>
             <th>Preço unitário</th>
             <th></th>
-          </tr>
         </thead>
         <tbody>
           {produtos.map((produto) => {
@@ -69,10 +67,9 @@ export default function ListaProdutos() {
             return (
               <tr
                 key={produto.id}
-                style={{
-                  background: emFalta ? "#fdecea" : "transparent",
-                  borderBottom: "1px solid #eee",
-                }}
+                className={
+                   emFalta ? "em-falta" : undefined
+                }
               >
                 <td>{produto.nome}</td>
                 <td>{produto.categorias?.nome ?? "—"}</td>

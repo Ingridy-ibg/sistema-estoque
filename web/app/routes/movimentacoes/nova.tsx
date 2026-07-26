@@ -85,7 +85,7 @@ export default function NovaMovimentacao() {
           <label htmlFor="motivo">Motivo (opcional)</label><br />
           <input id="motivo" name="motivo" type="text" />
         </div>
-        {actionData?.erro && <p style={{ color: "red" }}>{actionData.erro}</p>}
+        {actionData?.erro && <p className="erro">{actionData.erro}</p>}
         <button type="submit" disabled={enviando} style={{ marginTop: 16 }}>
           {enviando ? "Registrando..." : "Registrar"}
         </button>
