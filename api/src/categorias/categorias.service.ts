@@ -14,7 +14,13 @@ export class CategoriasService {
   findAll() {
     return this.prisma.categorias.findMany({ 
       orderBy: {nome: 'asc'},
-        include: { _count: { select: { produtos: true } } },
+
+        include: {
+           _count: { 
+            select: { produtos: {where: { ativo: true } } } ,
+      },
+    },
+
     });
   }
 
@@ -32,7 +38,9 @@ export class CategoriasService {
 
   async remove(id: number) {
     const categoria = await this.prisma.categorias.findUnique({ where: { id },
-    include: { _count: { select: {produtos: true}}},
+    include: { _count: { select: {produtos: {where: {ativo: true } } },
+    },
+  },
   });
 
   if (!categoria){
@@ -43,6 +51,15 @@ export class CategoriasService {
 
   throw new BadRequestException(`Não é possível excluir essa categoria. ${categoria._count.produtos} produto(s) ainda estão ligadas à ela.`);    
   }
-  return this.prisma.categorias.delete({ where: { id }});
-  }
+
+ return this.prisma.$transaction(async (tx) => {
+    await tx.produtos.updateMany({
+      where: { categoria_id: id },
+      data: { categoria_id: null },
+    });
+
+  return tx.categorias.delete({ where: { id } });
+
+  });
+}
 }
