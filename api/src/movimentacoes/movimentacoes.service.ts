@@ -35,9 +35,11 @@ export class MovimentacoesService {
     });
   }
 
-  findAll() {
+  findAll(limite?: number) {
     return this.prisma.movimentacoes.findMany({
       orderBy: { criado_em: 'desc' },
+      take: limite,
+      include: { produtos: { select: { nome: true, unidade_medida: true } } },
     });
   }
 

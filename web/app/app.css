@@ -8,12 +8,13 @@
   --surface: #f7f7f7;
   --danger-bg: #fdecea; /*background do produto em falta*/
   --danger-text: #8a1c12; /*texto do produto em falta*/
-  --link: #0b5fff;      /*palavras linkadas*/
+  --link: #003fb6;      /*palavras linkadas*/
   --accent-bg: #1a7f37; /*fundo do botao de novo produto*/
   --accent-text: #ffffff; /*letra do botao de novo produto*/
   --danger-solid-bg: #f32b2b;; /*fundo do botao de excluir*/
   --danger-solid-text: #ffffff; /*letra do botao de excluir*/
   --edit-button-bg: #1063e2; /*fundo botao editar*/
+  --layout-button-bg: #4c605a30;
 
 }
 
@@ -26,11 +27,11 @@
     --surface: #252525;
     --danger-bg: #4a1512; /*background do produto em falta*/
     --danger-text: #ffb3ab; /*texto do produto em falta*/
-    --link: #6fa8ff;  /*palavras linkadas*/
+    --link: #829ec8;  /*palavras linkadas*/
     --danger-solid-bg: #c81c1c; /*fundo do botao de excluir*/
     --danger-solid-text: #ffe5e2; /*letra do botao de excluir*/
     --edit-button-bg: #384e71; /*fundo botao editar*/
-
+    --layout-button-bg: #9ebab230;
   }
 }
 

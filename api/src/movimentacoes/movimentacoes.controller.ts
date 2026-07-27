@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, ParseIntPipe, UseGuards, Req} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, ParseIntPipe, UseGuards, Req, Query} from '@nestjs/common';
 import type { Request } from 'express';
 import { MovimentacoesService } from './movimentacoes.service';
 import { CreateMovimentacoeDto } from './dto/create-movimentacoe.dto';
@@ -16,8 +16,8 @@ export class MovimentacoesController {
   }
 
   @Get()
-  findAll() {
-    return this.movimentacoesService.findAll();
+  findAll(@Query('limite', new ParseIntPipe({ optional: true })) limite?: number) {
+    return this.movimentacoesService.findAll(limite);
   }
 
   @Get(':id')

@@ -1,4 +1,4 @@
-import { Form, useNavigation } from "react-router";
+import { Form, useNavigation, Link } from "react-router";
 
 interface Categoria {
   id: number;
@@ -50,11 +50,27 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
         <input id="preco_unitario" name="preco_unitario" type="number" step="0.01" min="0" defaultValue={produto?.preco_unitario} required />
       </div>
       {erro && <p style={{ color: "red" }}>{erro}</p>}
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
-      <button type="submit" disabled={enviando} style={{ background: "var(--accent-bg)", color: "var(--accent-text)" }}>
+        <div style={{ display: "flex", justifyContent: "center", gap: 12, marginTop: 24 }}>
+      <Link
+        to="/produtos"
+        style={{
+          padding: "6px 12px",
+          border: "1px solid var(--border)",
+          borderRadius: 4,
+          textDecoration: "none",
+          color: "var(--text)",
+        }}
+      >
+        Cancelar
+      </Link>
+      <button
+        type="submit"
+        disabled={enviando}
+        style={{ background: "var(--accent-bg)", color: "var(--accent-text)" }}
+      >
         {enviando ? "Salvando..." : "Salvar"}
       </button>
-      </div>
+    </div>
     </Form>
   );
 }

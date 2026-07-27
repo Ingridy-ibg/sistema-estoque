@@ -35,7 +35,6 @@ export default function NovoProduto() {
 
   return (
     <div>
-      <h1>Novo produto</h1>
       <ProdutoForm categorias={categorias} erro={actionData?.erro} />
     </div>
   );

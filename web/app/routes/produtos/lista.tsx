@@ -46,11 +46,8 @@ export default function ListaProdutos() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h1>Produtos</h1>
-        <Link to="/produtos/novo"><button style={{background: "var(--accent-bg)", color: "var(--accent-text)"}}>Novo Produto</button></Link>
-      </div>
-
+      
+       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Form method="get" onChange={(e) => submit(e.currentTarget)} style={{ marginTop: 16 }}>
         <label htmlFor="categoria_id">Filtrar por categoria: </label>
         <select id="categoria_id" name="categoria_id" defaultValue={categoriaId}>
@@ -61,7 +58,9 @@ export default function ListaProdutos() {
           ))}
         </select>
       </Form>
-
+      
+        <Link to="/produtos/novo"><button style={{background: "var(--accent-bg)", color: "var(--accent-text)"}}>Novo Produto</button></Link>
+      </div>
 
       <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 16 }}>
         <thead>
@@ -93,7 +92,7 @@ export default function ListaProdutos() {
                   <Form
                     method="post"
                     onSubmit={(e) => {
-                      if (!confirm(`Excluir "${produto.nome}"? O histórico será preservado.`)) {
+                      if (!confirm(`Excluir "${produto.nome}"?`)) {
                         e.preventDefault();
                       }
                     }}

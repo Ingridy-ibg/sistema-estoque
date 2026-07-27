@@ -1,7 +1,7 @@
-import { Outlet, redirect, Link } from "react-router";
+import { Outlet, redirect, NavLink } from "react-router";
 import { getToken, clearToken } from "../lib/session";
 
-export async function clientToken() {
+export async function clientLoader() {
     const token = getToken();
     if (!token){
         throw redirect("/login");
@@ -10,32 +10,57 @@ export async function clientToken() {
 }
 
 export default function ProtectedLayout (){
+
+    const linkStyle = ({ isActive }: { isActive: boolean }) => ({
+    padding: "8px 14px",
+    borderRadius: 6,
+    textDecoration: "none",
+    background: isActive ? "var(--layout-button-bg)" : "transparent",
+    color: "var(--text)",
+    fontWeight: isActive ? 550 : 400,
+  });
+  
     return (
         <div>
+
+            <header
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 24,
+          padding: "14px 24px",
+          borderBottom: "1px solid var(--border)",
+          background: "var(--surface)",
+        }}
+      >
+        <span style={{ fontWeight: 700, fontSize: 18 }}>Estoque</span>
+
+
             < nav
             style={{
                 display: "flex",
-                gap: 16,
-                padding: "12px 24px",
-                borderBottom: "1px solid #ddd",
-                alignItems: "center",
+                gap: 4,
             }}
             >
-                <Link to="/">Painel</Link>
-                <Link to="/categorias">Categorias</Link>
-                <Link to="/produtos">Produtos</Link>
-                <Link to="/movimentacoes/nova">Nova Movimentação</Link>
-                <button 
-                onClick={() => {
-                    clearToken();
-                    window.location.href = "/login";
-                }}
-                style={{background: "var(--danger-solid-bg", color: "#e8e8e8", marginLeft: "auto"}}
-                >
-                    Sair
-                </button>
-            </nav>
-            <main style={{ padding:24, fontFamily: "sans-serif"}}>
+          <NavLink to="/" end style={linkStyle}>Início</NavLink>
+           <NavLink to="/categorias" style={linkStyle}>Categorias</NavLink>
+          <NavLink to="/produtos" style={linkStyle}>Produtos</NavLink>
+          <NavLink to="/movimentacoes/nova" style={linkStyle}>Nova movimentação</NavLink>
+        </nav>
+
+        <button
+          onClick={() => {
+            clearToken();
+            window.location.href = "/login";
+          }}
+          style={{ marginLeft: "auto" }}
+        >
+          Sair
+        </button>
+
+      </header>
+      
+            <main style={{ padding: 24, maxWidth: 1000, margin: "0 auto" }}>
                 <Outlet />
             </main>
         </div>

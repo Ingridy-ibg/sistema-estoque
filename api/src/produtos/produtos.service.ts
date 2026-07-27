@@ -27,6 +27,7 @@ export class ProdutosService {
     }
     return this.prisma.produtos.findMany({
       where,
+      orderBy: { nome: 'asc'} ,
     include: { categorias: { select: { nome: true } } },
   });
   }

@@ -47,7 +47,6 @@ export default function NovaMovimentacao() {
 
   return (
     <div>
-      <h1>Nova movimentação</h1>
       <Form method="post" style={{ maxWidth: 200, margin: "0 auto" }}>
         <div>
           <div><label htmlFor="busca">Buscar produto</label><br /> 

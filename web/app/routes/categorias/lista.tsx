@@ -45,8 +45,6 @@ export default function ListaCategorias() {
 
   return (
     <div>
-      <h1>Categorias</h1>
-
       <Form method="post" style={{ marginTop: 16, display: "flex", gap: 8, alignItems: "flex-end" }}>
         <div>
           <label htmlFor="nome">Nome</label><br />
@@ -79,7 +77,13 @@ export default function ListaCategorias() {
               <td>{categoria.descricao ?? "—"}</td>
               <td>{categoria._count.produtos}</td>
               <td>
-                <Form method="post">
+                <Form method="post"
+                   onSubmit={(e) => {
+                    if (!confirm(`Excluir a categoria "${categoria.nome}"?`)) {
+                    e.preventDefault();
+                  }
+                }}
+                >
                   <input type="hidden" name="intent" value="excluir" />
                   <input type="hidden" name="id" value={categoria.id} />
                   <button type="submit" style={{background: "var(--danger-solid-bg)", color: "var(--danger-solid-text)"}} disabled={enviando}>excluir</button>
