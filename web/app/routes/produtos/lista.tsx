@@ -17,6 +17,17 @@ interface Categoria {
   nome: string;
 }
 
+export async function clientAction({ request }: Route.ClientActionArgs) {
+  const formData = await request.formData();
+
+  try {
+    await apiFetch(`/produtos/${formData.get("id")}`, { method: "DELETE" });
+    return { ok: true };
+  } catch (erro) {
+    return { erro: erro instanceof Error ? erro.message : "Erro ao excluir produto" };
+  }
+}
+
 export async function clientLoader( { request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
   const categoriaId = url.searchParams.get("categoria_id") ?? "";
@@ -76,7 +87,27 @@ export default function ListaProdutos() {
                 <td>{produto.quantidade_atual} {produto.unidade_medida}</td>
                 <td>{produto.quantidade_minima}</td>
                 <td>R$ {produto.preco_unitario}</td>
-                <td><Link to={`/produtos/${produto.id}/editar`}><button style={{background: "var(--edit-button-bg)", color: "var(--accent-text)"}}>editar</button></Link></td>
+                <td>
+                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                  <Link to={`/produtos/${produto.id}/editar`}><button style={{background: "var(--edit-button-bg)", color: "var(--accent-text)"}}>editar</button></Link>
+                  <Form
+                    method="post"
+                    onSubmit={(e) => {
+                      if (!confirm(`Excluir "${produto.nome}"? O histórico será preservado.`)) {
+                        e.preventDefault();
+                      }
+                    }}
+                  >
+                    <input type="hidden" name="id" value={produto.id} />
+                    <button
+                      type="submit"
+                      style={{ background: "var(--danger-solid-bg)", color: "var(--danger-solid-text)" }}
+                    >
+                      excluir
+                    </button>
+                  </Form>
+                </div>
+              </td>
               </tr>
             );
           })}

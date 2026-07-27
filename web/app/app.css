@@ -108,8 +108,8 @@ body {
   }
 }
 
-form input,
-form select {
+form[method="post"] input:not([type="hidden"]),
+form[method="post"] select {
   width: 100%;
   box-sizing: border-box;
 }

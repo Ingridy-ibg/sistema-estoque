@@ -100,7 +100,7 @@ export default function NovaMovimentacao() {
             )}
           </div>
         </div>
-        <div style={{ marginTop: 12 }}>
+        <div style={{ marginTop: 12}}>
           <label htmlFor="tipo">Tipo</label><br />
           <select id="tipo" name="tipo" required>
             <option value="entrada">Entrada</option>

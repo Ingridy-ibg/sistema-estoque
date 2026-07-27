@@ -14,16 +14,16 @@ export class ProdutosService {
   }
 
   findAll(categoriaId?: string) {
-    let where: { categoria_id? : number| null } | undefined;
+    let where: {ativo:boolean; categoria_id? : number| null } = {ativo: true};
 
     if (categoriaId === 'sem' ) {
-      where = { categoria_id: null };
+      where = { ...where, categoria_id: null };
     }else if (categoriaId){
       const id = Number(categoriaId);
       if (Number.isNaN(id)){
         throw new BadRequestException('categoria_id invalido');
       }
-      where = { categoria_id: id };
+      where = { ...where, categoria_id: id };
     }
     return this.prisma.produtos.findMany({
       where,
@@ -43,8 +43,15 @@ export class ProdutosService {
     });
   }
 
-  remove(id: number) {
-    return this.prisma.produtos.delete({where: {id}});
+  async remove(id: number) {
+    const produto = await this.prisma.produtos.findUnique({ where: { id } });
+    if(!produto){
+      throw new NotFoundException(`Produto ${id} não existe`)
+    }
+    return this.prisma.produtos.update({
+      where: { id },
+      data: { ativo: false },
+    }); 
   }
 
   private async verificarCategoriaExiste(categoriaId?: number) {
@@ -63,7 +70,7 @@ export class ProdutosService {
     return this.prisma.$queryRaw`
     SELECT id, nome, quantidade_atual, quantidade_minima
     FROM produtos
-    WHERE quantidade_atual <= quantidade_minima
+    WHERE ativo = true AND quantidade_atual <= quantidade_minima
     ORDER BY nome;
     `;
   }
@@ -86,7 +93,7 @@ export class ProdutosService {
   async valorTotalEstoque() {
     const resultado = await this.prisma.$queryRaw<{ valor_atual: string | null }[]>`
     SELECT ROUND(SUM(quantidade_atual * preco_unitario), 2):: text AS valor_atual
-    FROM produtos;
+    FROM produtos WHERE ativo = true;
     `; 
     
     return {valor_total: resultado[0].valor_atual };

@@ -1,4 +1,4 @@
-import { redirect, useLoaderData, useActionData } from "react-router";
+import { redirect, useLoaderData, useActionData} from "react-router";
 import { apiFetch } from "../../lib/api-client";
 import { ProdutoForm } from "../../components/produto-form";
 import type { Route } from "./+types/editar";
@@ -13,6 +13,15 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 
 export async function clientAction({ request, params }: Route.ClientActionArgs) {
   const formData = await request.formData();
+  
+  if (formData.get("intent") === "excluir"){
+    try{ 
+      await apiFetch(`/produtos/${params.id}`, { method: "DELETE"});
+      return redirect("/produtos");
+    }catch(erro){
+      return { erro: erro instanceof Error ? erro.message : "Erro ao excluir produto"};
+    }
+  }
   const categoriaId = formData.get("categoria_id") as string;
 
   try {
