@@ -40,6 +40,7 @@ export default function NovaMovimentacao() {
   const navigation = useNavigation();
   const enviando = navigation.state === "submitting";
   const [ busca, setBusca ] = useState("");
+  const [produtoId, setProdutoId] = useState("");
 
   const produtosFiltrados = produtos.filter((p) => p.nome.toLowerCase().includes(busca.toLowerCase()),
 );
@@ -47,9 +48,8 @@ export default function NovaMovimentacao() {
   return (
     <div>
       <h1>Nova movimentação</h1>
-      <Form method="post">
+      <Form method="post" style={{ maxWidth: 200, margin: "0 auto" }}>
         <div>
-          <label htmlFor="produto_id">Produto</label><br />
           <div><label htmlFor="busca">Buscar produto</label><br /> 
           <input
           id= "busca"
@@ -59,14 +59,45 @@ export default function NovaMovimentacao() {
           placeholder="digite aqui"
           />
           </div>
-          <div style = {{marginTop: 12 }}>
-          <select id="produto_id" name="produto_id"  size={5} required>
-            {produtosFiltrados.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.nome} (atual: {p.quantidade_atual} {p.unidade_medida})
-              </option>
-            ))}
-          </select>
+         
+         <input type="hidden" name="produto_id" value={produtoId} />
+
+          <div
+            style={{
+              marginTop: 8,
+              maxHeight: 200,
+              overflowY: "auto",
+              border: "1px solid var(--border)",
+              borderRadius: 4,
+            }}>
+          
+              {produtosFiltrados.map((p) => {
+              const selecionado = String(p.id) === produtoId;
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => setProdutoId(String(p.id))}
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    textAlign: "left",
+                    border: "none",
+                    borderRadius: 0,
+                    padding: "8px 10px",
+                    background: selecionado ? "var(--accent-bg)" : "transparent",
+                    color: selecionado ? "var(--accent-text)" : "var(--text)",
+                  }}
+                >
+                  {p.nome}
+                </button>
+              );
+            })}
+            {produtosFiltrados.length === 0 && (
+              <p style={{ padding: "8px 10px", color: "var(--text-muted)" }}>
+                Nenhum produto encontrado.
+              </p>
+            )}
           </div>
         </div>
         <div style={{ marginTop: 12 }}>
@@ -85,9 +116,11 @@ export default function NovaMovimentacao() {
           <input id="motivo" name="motivo" type="text" />
         </div>
         {actionData?.erro && <p className="erro">{actionData.erro}</p>}
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
         <button type="submit" disabled={enviando} style={{ background: "var(--accent-bg)", color: "var(--accent-text)", marginTop: 16 }}>
           {enviando ? "Registrando..." : "Registrar"}
         </button>
+        </div>
       </Form>
     </div>
   );

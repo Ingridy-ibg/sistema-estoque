@@ -107,3 +107,9 @@ body {
     color-scheme: dark;
   }
 }
+
+form input,
+form select {
+  width: 100%;
+  box-sizing: border-box;
+}

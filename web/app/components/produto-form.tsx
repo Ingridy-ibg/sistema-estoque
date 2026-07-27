@@ -22,8 +22,9 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
   const enviando = navigation.state === "submitting";
 
   return (
-    <Form method="post">
-      <div>
+    <Form method="post" style={{ maxWidth: 200, margin: "0 auto" }}>
+  
+      <div >
         <label htmlFor="nome">Nome</label><br />
         <input id="nome" name="nome" type="text" defaultValue={produto?.nome} required />
       </div>
@@ -49,9 +50,11 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
         <input id="preco_unitario" name="preco_unitario" type="number" step="0.01" min="0" defaultValue={produto?.preco_unitario} required />
       </div>
       {erro && <p style={{ color: "red" }}>{erro}</p>}
-      <button type="submit" disabled={enviando} style={{ background: "var(--accent-bg)", color: "var(--accent-text)", marginTop: 16 }}>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
+      <button type="submit" disabled={enviando} style={{ background: "var(--accent-bg)", color: "var(--accent-text)" }}>
         {enviando ? "Salvando..." : "Salvar"}
       </button>
+      </div>
     </Form>
   );
 }
