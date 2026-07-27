@@ -30,7 +30,7 @@ export default function ProtectedLayout (){
                     clearToken();
                     window.location.href = "/login";
                 }}
-                style={{ marginLeft: "auto"}}
+                style={{background: "var(--danger-solid-bg", color: "#e8e8e8", marginLeft: "auto"}}
                 >
                     Sair
                 </button>

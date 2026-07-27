@@ -60,7 +60,6 @@ export default function NovaMovimentacao() {
           />
           </div>
           <div style = {{marginTop: 12 }}>
-            <label htmlFor= "produto_id">Produto</label><br />
           <select id="produto_id" name="produto_id"  size={5} required>
             {produtosFiltrados.map((p) => (
               <option key={p.id} value={p.id}>
@@ -86,7 +85,7 @@ export default function NovaMovimentacao() {
           <input id="motivo" name="motivo" type="text" />
         </div>
         {actionData?.erro && <p className="erro">{actionData.erro}</p>}
-        <button type="submit" disabled={enviando} style={{ marginTop: 16 }}>
+        <button type="submit" disabled={enviando} style={{ background: "var(--accent-bg)", color: "var(--accent-text)", marginTop: 16 }}>
           {enviando ? "Registrando..." : "Registrar"}
         </button>
       </Form>

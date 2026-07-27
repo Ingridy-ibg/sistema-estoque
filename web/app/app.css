@@ -1,26 +1,36 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #ffffff;
+  --bg: #ffffff; /*background*/
   --text: #1a1a1a;
   --text-muted: #666666;
   --border: #dddddd;
   --surface: #f7f7f7;
-  --danger-bg: #fdecea;
-  --danger-text: #8a1c12;
-  --link: #0b5fff;
+  --danger-bg: #fdecea; /*background do produto em falta*/
+  --danger-text: #8a1c12; /*texto do produto em falta*/
+  --link: #0b5fff;      /*palavras linkadas*/
+  --accent-bg: #1a7f37; /*fundo do botao de novo produto*/
+  --accent-text: #ffffff; /*letra do botao de novo produto*/
+  --danger-solid-bg: #f32b2b;; /*fundo do botao de excluir*/
+  --danger-solid-text: #ffffff; /*letra do botao de excluir*/
+  --edit-button-bg: #1063e2; /*fundo botao editar*/
+
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #1a1a1a;
+    --bg: #1a1a1a;  /*background*/
     --text: #e8e8e8;
     --text-muted: #a0a0a0;
     --border: #3a3a3a;
     --surface: #252525;
-    --danger-bg: #4a1512;
-    --danger-text: #ffb3ab;
-    --link: #6fa8ff;
+    --danger-bg: #4a1512; /*background do produto em falta*/
+    --danger-text: #ffb3ab; /*texto do produto em falta*/
+    --link: #6fa8ff;  /*palavras linkadas*/
+    --danger-solid-bg: #c81c1c; /*fundo do botao de excluir*/
+    --danger-solid-text: #ffe5e2; /*letra do botao de excluir*/
+    --edit-button-bg: #384e71; /*fundo botao editar*/
+
   }
 }
 

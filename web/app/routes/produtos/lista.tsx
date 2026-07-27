@@ -37,7 +37,7 @@ export default function ListaProdutos() {
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <h1>Produtos</h1>
-        <Link to="/produtos/novo">+ Novo produto</Link>
+        <Link to="/produtos/novo"><button style={{background: "var(--accent-bg)", color: "var(--accent-text)"}}>Novo Produto</button></Link>
       </div>
 
         <Form method="get" onChange={(e) => submit(e.currentTarget)} style={{ marginTop: 16 }}>
@@ -76,7 +76,7 @@ export default function ListaProdutos() {
                 <td>{produto.quantidade_atual} {produto.unidade_medida}</td>
                 <td>{produto.quantidade_minima}</td>
                 <td>R$ {produto.preco_unitario}</td>
-                <td><Link to={`/produtos/${produto.id}/editar`}>editar</Link></td>
+                <td><Link to={`/produtos/${produto.id}/editar`}><button style={{background: "var(--edit-button-bg)", color: "var(--accent-text)"}}>editar</button></Link></td>
               </tr>
             );
           })}

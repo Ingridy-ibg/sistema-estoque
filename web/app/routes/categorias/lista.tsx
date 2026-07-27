@@ -82,7 +82,7 @@ export default function ListaCategorias() {
                 <Form method="post">
                   <input type="hidden" name="intent" value="excluir" />
                   <input type="hidden" name="id" value={categoria.id} />
-                  <button type="submit" disabled={enviando}>excluir</button>
+                  <button type="submit" style={{background: "var(--danger-solid-bg)", color: "var(--danger-solid-text)"}} disabled={enviando}>excluir</button>
                 </Form>
               </td>
             </tr>
