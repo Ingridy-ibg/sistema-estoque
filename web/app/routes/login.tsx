@@ -31,23 +31,36 @@ export default function Login(){
         <div style = {{ maxWidth: 360, margin: "80px auto", fontFamily: "sans-serif"}}>
             <h1>Login</h1>
             <Form method="post">
+
                 <div>
                     <label htmlFor= "email">E-mail</label>
                     <br />
-                   <input id= "email" name="email" type="email" required/>
-
+                   <input 
+                   id= "email" 
+                   name="email" 
+                   type="email"
+                   placeholder= "digite aqui" 
+                   required/>
                 </div>
+                
                 <div style={{marginTop: 12}}>
                     <label htmlFor="senha">Senha</label>
                     <br />
-                    <input id= "senha" name="senha" type="password" required/>
+                    <input 
+                    id= "senha" 
+                    name="senha" 
+                    type="password"
+                    placeholder= "digite aqui" 
+                    required/>
                 </div>
+
                 {actionData?.erro && (
                     <p className="erro">{actionData.erro}</p>
                 )}
+
                 <button type = "submit" disabled={enviando} style={{ marginTop: 16 }}>
                     {enviando ? "Entrando..." : "Entrar"}
-                    </button>
+                </button>
             </Form>
             </div>
     );

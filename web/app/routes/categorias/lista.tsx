@@ -48,12 +48,23 @@ export default function ListaCategorias() {
       <Form method="post" style={{ marginTop: 16, display: "flex", gap: 8, alignItems: "flex-end" }}>
         <div>
           <label htmlFor="nome">Nome</label><br />
-          <input id="nome" name="nome" type="text" required />
+          <input 
+          id="nome" 
+          name="nome" 
+          type="text"
+          placeholder= "digite aqui"
+          required />
         </div>
+
         <div>
           <label htmlFor="descricao">Descrição (opcional)</label><br />
-          <input id="descricao" name="descricao" type="text" />
+          <input 
+          id="descricao" 
+          name="descricao" 
+          type="text"
+          placeholder= "digite aqui" />
         </div>
+
         <button type="submit" disabled={enviando}>
           {enviando ? "Salvando..." : "Adicionar"}
         </button>
@@ -70,6 +81,7 @@ export default function ListaCategorias() {
             <th></th>
           </tr>
         </thead>
+        
         <tbody>
           {categorias.map((categoria) => (
             <tr key={categoria.id}>

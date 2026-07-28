@@ -48,6 +48,7 @@ export default function NovaMovimentacao() {
   return (
     <div>
       <Form method="post" style={{ maxWidth: 200, margin: "0 auto" }}>
+
         <div>
           <div><label htmlFor="busca">Buscar produto</label><br /> 
           <input
@@ -99,6 +100,7 @@ export default function NovaMovimentacao() {
             )}
           </div>
         </div>
+
         <div style={{ marginTop: 12}}>
           <label htmlFor="tipo">Tipo</label><br />
           <select id="tipo" name="tipo" required>
@@ -106,20 +108,40 @@ export default function NovaMovimentacao() {
             <option value="saida">Saída</option>
           </select>
         </div>
+
         <div style={{ marginTop: 12 }}>
           <label htmlFor="quantidade">Quantidade</label><br />
-          <input id="quantidade" name="quantidade" type="number" step="0.01" min="0.01" required />
+          <input 
+          id="quantidade" 
+          name="quantidade" 
+          type="number" 
+          step="0.01" 
+          min="0.01" 
+          placeholder= "digite aqui"
+          required />
         </div>
+
         <div style={{ marginTop: 12 }}>
           <label htmlFor="motivo">Motivo (opcional)</label><br />
-          <input id="motivo" name="motivo" type="text" />
+          <input 
+          id="motivo" 
+          name="motivo" 
+          type="text" 
+          placeholder= "digite aqui"
+          />
         </div>
+
         {actionData?.erro && <p className="erro">{actionData.erro}</p>}
+
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
-        <button type="submit" disabled={enviando} style={{ background: "var(--accent-bg)", color: "var(--accent-text)", marginTop: 16 }}>
+        <button 
+        type="submit" 
+        disabled={enviando} 
+        style={{ background: "var(--accent-bg)", color: "var(--accent-text)", marginTop: 16 }}>
           {enviando ? "Registrando..." : "Registrar"}
         </button>
         </div>
+        
       </Form>
     </div>
   );

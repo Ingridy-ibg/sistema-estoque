@@ -54,7 +54,7 @@ export default function Dashboard() {
         <div
           style={{
             ...cartao,
-            background: emFalta.length > 0 ? "var(--danger-bg)" : "transparent",
+            background: emFalta.length > 0 ? "var(--danger-bg)" : "var(--positive-card)",
             color: emFalta.length > 0 ? "var(--danger-text)" : "inherit",
           }}
         >
