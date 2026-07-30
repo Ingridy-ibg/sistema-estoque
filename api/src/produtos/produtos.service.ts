@@ -71,7 +71,7 @@ export class ProdutosService {
     return this.prisma.$queryRaw`
     SELECT id, nome, quantidade_atual, quantidade_minima
     FROM produtos
-    WHERE ativo = true AND quantidade_atual <= quantidade_minima
+    WHERE ativo = true AND quantidade_atual < quantidade_minima
     ORDER BY nome;
     `;
   }

@@ -73,7 +73,7 @@ export default function ListaProdutos() {
         </thead>
         <tbody>
           {produtos.map((produto) => {
-            const emFalta = Number(produto.quantidade_atual) <= Number(produto.quantidade_minima);
+            const emFalta = Number(produto.quantidade_atual) < Number(produto.quantidade_minima);
             return (
               <tr
                 key={produto.id}
