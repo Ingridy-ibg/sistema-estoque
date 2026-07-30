@@ -1,4 +1,4 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { Injectable, ConflictException, NotFoundException, BadRequestException } from '@nestjs/common';
 import * as bcrypt from'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';    
@@ -26,8 +26,26 @@ export class UsuariosService {
 
     findAll(){
         return this.prisma.usuarios.findMany({
+            where: { ativo: true },
             orderBy: {nome: 'asc'},
             select: { id: true, nome: true, email: true },
         });
+    }
+
+    async remove(id: number, usuarioLogadoId: number) {
+    if (id === usuarioLogadoId) {
+        throw new BadRequestException('Você não pode excluir sua própria conta');
+    }
+
+    const usuario = await this.prisma.usuarios.findUnique({ where: { id } });
+    if (!usuario || !usuario.ativo) {
+        throw new NotFoundException(`Usuário ${id} não existe`);
+    }
+
+    return this.prisma.usuarios.update({
+        where: { id },
+        data: { ativo: false },
+        select: { id: true, nome: true, email: true },
+    });
     }
 }

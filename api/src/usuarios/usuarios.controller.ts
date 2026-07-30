@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Delete, Param, ParseIntPipe, Req} from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { AdminGuard } from "../auth/admin.guard";
+import type { Request } from 'express';
 
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, AdminGuard)
 @Controller('usuarios')
 export class UsuariosController {
     constructor(private readonly usuariosService: UsuariosService) {}
@@ -16,5 +18,11 @@ export class UsuariosController {
     @Get()
     findAll() {
         return this.usuariosService.findAll();
+    }
+
+    @Delete(':id')
+    remove(@Param('id', ParseIntPipe) id: number, @Req() request: Request) {
+        const usuarioLogadoId = (request['usuario'] as { sub: number }).sub;
+        return this.usuariosService.remove(id, usuarioLogadoId);
     }
 }

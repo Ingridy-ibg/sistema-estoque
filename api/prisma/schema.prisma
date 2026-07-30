@@ -47,5 +47,7 @@ model usuarios {
   nome          String          @db.VarChar(100)
   email         String          @unique @db.VarChar(150)
   senha_hash    String
+  papel         String          @default("operador") @db.VarChar(20)
+  ativo         Boolean         @default(true)
   movimentacoes movimentacoes[]
 }
