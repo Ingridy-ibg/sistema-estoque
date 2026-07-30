@@ -22,6 +22,7 @@ export async function clientAction({ request, params }: Route.ClientActionArgs) 
       return { erro: erro instanceof Error ? erro.message : "Erro ao excluir produto"};
     }
   }
+  
   const categoriaId = formData.get("categoria_id") as string;
 
   try {

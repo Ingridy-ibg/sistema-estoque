@@ -46,7 +46,7 @@ export class ProdutosService {
 
   async update(id: number, updateProdutoDto: UpdateProdutoDto) {
     await this.verificarCategoriaExiste( updateProdutoDto.categoria_id);
-    
+
     if (updateProdutoDto.nome) {
     const existente = await this.prisma.produtos.findFirst({
       where: {
@@ -77,8 +77,8 @@ export class ProdutosService {
     }); 
   }
 
-  private async verificarCategoriaExiste(categoriaId?: number) {
-    if (categoriaId === undefined) return;
+  private async verificarCategoriaExiste(categoriaId?: number | null) {
+    if (categoriaId === undefined || categoriaId === null ) return;
 
     const categoria = await this.prisma.categorias.findUnique({
       where: {id: categoriaId},
