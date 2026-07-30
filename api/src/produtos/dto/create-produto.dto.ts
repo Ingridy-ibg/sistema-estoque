@@ -14,7 +14,7 @@ export class CreateProdutoDto {
     @IsOptional()
     @IsInt()
     @IsPositive()
-    categoria_id?: number;
+    categoria_id?: number | null;
 
     @IsNotEmpty()
     @IsString()

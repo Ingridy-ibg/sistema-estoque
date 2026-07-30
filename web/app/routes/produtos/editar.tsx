@@ -29,7 +29,7 @@ export async function clientAction({ request, params }: Route.ClientActionArgs) 
       method: "PATCH",
       body: JSON.stringify({
         nome: formData.get("nome"),
-        categoria_id: categoriaId ? Number(categoriaId) : undefined,
+        categoria_id: categoriaId ? Number(categoriaId) : null,
         unidade_medida: formData.get("unidade_medida"),
         quantidade_minima: Number(formData.get("quantidade_minima")),
         preco_custo: Number(formData.get("preco_custo")),
