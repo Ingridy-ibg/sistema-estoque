@@ -32,5 +32,9 @@ export class CreateProdutoDto {
 
     @IsNumber()
     @Min(0)
-    preco_unitario: number;
+    preco_custo: number;
+
+    @IsNumber()
+    @Min(0)
+    preco_venda: number;
 }

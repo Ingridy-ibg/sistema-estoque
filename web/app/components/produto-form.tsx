@@ -12,7 +12,8 @@ interface ProdutoFormProps {
     categoria_id: number | null;
     unidade_medida: string;
     quantidade_minima: string;
-    preco_unitario: string;
+    preco_custo: string;
+    preco_venda: string;
   };
   erro?: string;
 }
@@ -71,15 +72,28 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
       </div>
 
       <div style={{ marginTop: 12 }}>
-        <label htmlFor="preco_unitario">Preço unitário</label><br />
+        <label htmlFor="preco_custo">Preço de Custo</label><br />
         <input 
-        id="preco_unitario" 
-        name="preco_unitario" 
+        id="preco_custo" 
+        name="preco_custo" 
         type="number" 
         step="0.01"
         min="0.00" 
         placeholder="digite aqui"
-        defaultValue={produto?.preco_unitario} 
+        defaultValue={produto?.preco_custo} 
+        required />
+      </div>
+
+        <div style={{ marginTop: 12 }}>
+        <label htmlFor="preco_venda">Preço de Venda</label><br />
+        <input 
+        id="preco_venda" 
+        name="preco_venda" 
+        type="number" 
+        step="0.01"
+        min="0.00" 
+        placeholder="digite aqui"
+        defaultValue={produto?.preco_venda} 
         required />
       </div>
 

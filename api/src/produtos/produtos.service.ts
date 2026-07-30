@@ -93,7 +93,7 @@ export class ProdutosService {
 
   async valorTotalEstoque() {
     const resultado = await this.prisma.$queryRaw<{ valor_atual: string | null }[]>`
-    SELECT ROUND(SUM(quantidade_atual * preco_unitario), 2):: text AS valor_atual
+    SELECT ROUND(SUM(quantidade_atual * preco_custo), 2)::text AS valor_atual
     FROM produtos WHERE ativo = true;
     `; 
     

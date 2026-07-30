@@ -32,7 +32,8 @@ export async function clientAction({ request, params }: Route.ClientActionArgs) 
         categoria_id: categoriaId ? Number(categoriaId) : undefined,
         unidade_medida: formData.get("unidade_medida"),
         quantidade_minima: Number(formData.get("quantidade_minima")),
-        preco_unitario: Number(formData.get("preco_unitario")),
+        preco_custo: Number(formData.get("preco_custo")),
+        preco_venda: Number(formData.get("preco_venda")),
       }),
     });
     return redirect("/produtos");

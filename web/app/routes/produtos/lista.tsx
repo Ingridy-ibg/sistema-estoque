@@ -8,7 +8,8 @@ interface Produto {
   unidade_medida: string;
   quantidade_atual: string;
   quantidade_minima: string;
-  preco_unitario: string;
+  preco_custo: string;
+  preco_venda: string;
   categorias: { nome: string } | null;
 }
 
@@ -68,7 +69,8 @@ export default function ListaProdutos() {
             <th>Categoria</th>
             <th>Qtd. atual</th>
             <th>Qtd. mínima</th>
-            <th>Preço unitário</th>
+            <th>Preço de Custo</th>
+            <th>Preço de Venda</th>
             <th></th>
         </thead>
         <tbody>
@@ -85,7 +87,8 @@ export default function ListaProdutos() {
                 <td>{produto.categorias?.nome ?? "—"}</td>
                 <td>{produto.quantidade_atual} {produto.unidade_medida}</td>
                 <td>{produto.quantidade_minima}</td>
-                <td>R$ {produto.preco_unitario}</td>
+                <td>R$ {produto.preco_custo}</td>
+                <td>R$ {produto.preco_venda}</td>
                 <td>
                 <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
                   <Link to={`/produtos/${produto.id}/editar`}><button style={{background: "var(--edit-button-bg)", color: "var(--accent-text)"}}>editar</button></Link>
