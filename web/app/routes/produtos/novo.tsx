@@ -2,6 +2,7 @@ import { redirect, useLoaderData, useActionData } from "react-router";
 import { apiFetch } from "../../lib/api-client";
 import { ProdutoForm } from "../../components/produto-form";
 import type { Route } from "./+types/novo";
+import { findBotPattern } from "isbot";
 
 export async function clientLoader() {
   const categorias = await apiFetch("/categorias");
@@ -24,6 +25,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
         preco_venda: Number(formData.get("preco_venda")),
       }),
     });
+
     return redirect("/produtos");
   } catch (erro) {
     return { erro: erro instanceof Error ? erro.message : "Erro ao criar produto" };
@@ -33,7 +35,6 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 export default function NovoProduto() {
   const { categorias } = useLoaderData<typeof clientLoader>();
   const actionData = useActionData<typeof clientAction>();
-
   return (
     <div>
       <ProdutoForm categorias={categorias} erro={actionData?.erro} />
