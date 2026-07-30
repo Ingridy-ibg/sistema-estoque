@@ -82,7 +82,7 @@ export default function Dashboard() {
                 <td>{p.nome}</td>
                 <td>{p.quantidade_atual}</td>
                 <td>{p.quantidade_minima}</td>
-                <td><Link to="/movimentacoes/nova"><button>registrar entrada</button></Link></td>
+                <td><Link to="/movimentacoes/nova?produto_id=${p.id}"><button>registrar entrada</button></Link></td>
               </tr>
             ))}
           </tbody>

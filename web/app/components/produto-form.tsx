@@ -31,6 +31,7 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
         name="nome" 
         type="text" 
         defaultValue={produto?.nome} 
+         placeholder="digite aqui"
         required />
       </div>
 
@@ -61,7 +62,8 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
         <input 
           id="quantidade_minima" 
           name="quantidade_minima" 
-          type="number" step="0.01" 
+          type="number" 
+          step="1" 
           min="0" 
           placeholder="digite aqui"
           defaultValue={produto?.quantidade_minima} 
@@ -74,8 +76,9 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
         id="preco_unitario" 
         name="preco_unitario" 
         type="number" 
-        step="0.01" 
-        min="0" 
+        step="0.01"
+        min="0.00" 
+        placeholder="digite aqui"
         defaultValue={produto?.preco_unitario} 
         required />
       </div>

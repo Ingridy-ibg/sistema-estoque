@@ -1,5 +1,5 @@
 import { Outlet, redirect, NavLink } from "react-router";
-import { getToken, clearToken } from "../lib/session";
+import { getToken, clearToken, getPapel } from "../lib/session";
 
 export async function clientLoader() {
     const token = getToken();
@@ -19,6 +19,8 @@ export default function ProtectedLayout (){
     color: "var(--text)",
     fontWeight: isActive ? 550 : 400,
   });
+
+  const ehAdmin = getPapel() === "admin";
   
     return (
         <div>
@@ -36,27 +38,25 @@ export default function ProtectedLayout (){
         <span style={{ fontWeight: 700, fontSize: 18 }}>Estoque</span>
 
 
-            < nav
-            style={{
-                display: "flex",
-                gap: 4,
-            }}
-            >
-          <NavLink to="/" end style={linkStyle}>Início</NavLink>
-           <NavLink to="/categorias" style={linkStyle}>Categorias</NavLink>
-          <NavLink to="/produtos" style={linkStyle}>Produtos</NavLink>
-          <NavLink to="/movimentacoes/nova" style={linkStyle}>Nova movimentação</NavLink>
-        </nav>
+            <nav style={{ display: "flex", gap: 4 }}>
+              <NavLink to="/" end style={linkStyle}>Início</NavLink>
+              <NavLink to="/categorias" style={linkStyle}>Categorias</NavLink>
+              <NavLink to="/produtos" style={linkStyle}>Produtos</NavLink>
+              <NavLink to="/movimentacoes/nova" style={linkStyle}>Nova movimentação</NavLink>
+            </nav>
 
-        <button
-          onClick={() => {
-            clearToken();
-            window.location.href = "/login";
-          }}
-          style={{ marginLeft: "auto" }}
-        >
-          Sair
-        </button>
+            <div style={{ marginLeft: "auto", display: "flex", gap: 12, alignItems: "center" }}>
+              {ehAdmin && <NavLink to="/usuarios" style={linkStyle}>Usuários</NavLink>}
+              <button
+                onClick={() => {
+                  clearToken();
+                  window.location.href = "/login";
+                }}
+              >
+                Sair
+              </button>
+            </div>
+        
 
       </header>
       

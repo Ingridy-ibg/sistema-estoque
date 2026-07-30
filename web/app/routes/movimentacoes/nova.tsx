@@ -10,9 +10,13 @@ interface Produto {
   quantidade_atual: string;
 }
 
-export async function clientLoader() {
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
+  const url = new URL(request.url);
+  const produtoIdInicial = url.searchParams.get("produto_id") ?? "";
+
   const produtos: Produto[] = await apiFetch("/produtos");
-  return { produtos };
+  const produtoInicial = produtos.find((p) => String(p.id) === produtoIdInicial);
+  return { produtos, produtoIdInicial, buscaInicial: produtoInicial?.nome ?? ""};
 }
 
 export async function clientAction({ request }: Route.ClientActionArgs) {
@@ -35,12 +39,12 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 }
 
 export default function NovaMovimentacao() {
-  const { produtos } = useLoaderData<typeof clientLoader>();
+  const { produtos, produtoIdInicial, buscaInicial } = useLoaderData<typeof clientLoader>();
   const actionData = useActionData<typeof clientAction>();
   const navigation = useNavigation();
   const enviando = navigation.state === "submitting";
-  const [ busca, setBusca ] = useState("");
-  const [produtoId, setProdutoId] = useState("");
+  const [ busca, setBusca ] = useState(buscaInicial);
+  const [produtoId, setProdutoId] = useState(produtoIdInicial);
 
   const produtosFiltrados = produtos.filter((p) => p.nome.toLowerCase().includes(busca.toLowerCase()),
 );
@@ -115,8 +119,8 @@ export default function NovaMovimentacao() {
           id="quantidade" 
           name="quantidade" 
           type="number" 
-          step="0.01" 
-          min="0.01" 
+          min="0.01"
+          step="0.01"
           placeholder= "digite aqui"
           required />
         </div>
@@ -141,7 +145,7 @@ export default function NovaMovimentacao() {
           {enviando ? "Registrando..." : "Registrar"}
         </button>
         </div>
-        
+
       </Form>
     </div>
   );
