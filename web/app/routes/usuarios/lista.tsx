@@ -78,7 +78,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
                 name="senha" 
                 type="password" 
                 placeholder="mínimo 6 caracteres" 
-                minLength={8} 
+                minLength={6} 
                 required />
             </div>
 

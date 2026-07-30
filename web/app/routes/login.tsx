@@ -29,7 +29,7 @@ export default function Login(){
 
     return (
         <div style = {{ maxWidth: 360, margin: "80px auto", fontFamily: "sans-serif"}}>
-            <h1>Login</h1>
+            <h2>Login</h2>
             <Form method="post">
 
                 <div>
