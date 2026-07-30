@@ -51,10 +51,10 @@ export default function NovaMovimentacao() {
 
   return (
     <div>
-      <Form method="post" style={{ maxWidth: 200, margin: "0 auto" }}>
+      <Form method="post" style={{ maxWidth: 400, margin: "0 auto" }}>
 
         <div>
-          <div><label htmlFor="busca">Buscar produto</label><br /> 
+          <div><label htmlFor="busca">Buscar produto:</label><br /> 
           <input
           id= "busca"
           type= "text"
@@ -69,7 +69,7 @@ export default function NovaMovimentacao() {
           <div
             style={{
               marginTop: 8,
-              maxHeight: 200,
+              maxHeight: 230,
               overflowY: "auto",
               border: "1px solid var(--border)",
               borderRadius: 4,
@@ -83,14 +83,15 @@ export default function NovaMovimentacao() {
                   type="button"
                   onClick={() => setProdutoId(String(p.id))}
                   style={{
-                    display: "block",
-                    width: "100%",
-                    textAlign: "left",
-                    border: "none",
-                    borderRadius: 0,
-                    padding: "8px 10px",
-                    background: selecionado ? "var(--accent-bg)" : "transparent",
-                    color: selecionado ? "var(--accent-text)" : "var(--text)",
+                  display: "block",
+                  width: "100%",
+                  textAlign: "left",
+                  border: "none",
+                  borderRadius: 0,
+                  padding: "6px 10px",
+                  fontSize: 14,
+                  background: selecionado ? "var(--accent-bg)" : "transparent",
+                  color: selecionado ? "var(--accent-text)" : "var(--text)",
                   }}
                 >
                   {p.nome}
@@ -114,7 +115,7 @@ export default function NovaMovimentacao() {
         </div>
 
         <div style={{ marginTop: 12 }}>
-          <label htmlFor="quantidade">Quantidade</label><br />
+          <label htmlFor="quantidade">Quantidade:</label><br />
           <input 
           id="quantidade" 
           name="quantidade" 
@@ -126,7 +127,7 @@ export default function NovaMovimentacao() {
         </div>
 
         <div style={{ marginTop: 12 }}>
-          <label htmlFor="motivo">Motivo (opcional)</label><br />
+          <label htmlFor="motivo">Motivo (opcional):</label><br />
           <input 
           id="motivo" 
           name="motivo" 

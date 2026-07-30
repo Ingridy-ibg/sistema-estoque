@@ -87,7 +87,7 @@ export default function ListaCategorias() {
             <tr key={categoria.id}>
               <td><Link to={`/produtos?categoria_id=${categoria.id}`} >{categoria.nome}</Link></td>
               <td>{categoria.descricao ?? "—"}</td>
-              <td>{categoria._count.produtos}</td>
+              <td >{categoria._count.produtos}</td>
               <td>
                 <Form method="post"
                    onSubmit={(e) => {
@@ -98,7 +98,16 @@ export default function ListaCategorias() {
                 >
                   <input type="hidden" name="intent" value="excluir" />
                   <input type="hidden" name="id" value={categoria.id} />
-                  <button type="submit" style={{background: "var(--danger-solid-bg)", color: "var(--danger-solid-text)"}} disabled={enviando}>excluir</button>
+                   <button
+                      type="submit"
+                      style={{
+                        background: "transparent",
+                        color: "var(--danger-solid-bg)",
+                        border: "1px solid var(--danger-solid-bg)",
+                        fontSize: 13,
+                        padding: "4px 10px",
+                      }}
+                      >excluir</button>
                 </Form>
               </td>
             </tr>

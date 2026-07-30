@@ -63,16 +63,24 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <h2 style={{ marginTop: 32 }}>Produtos que precisam de reposição:</h2>
+      <h3 style={{ marginTop: 32 }}>Produtos que precisam de reposição:</h3>
       {emFalta.length === 0 ? (
         <p style={{ color: "var(--text-muted)" }}>Nenhum produto abaixo do mínimo.</p>
       ) : (
         <table>
+       
+          <colgroup>
+            <col style={{ width: "40%" }} />
+            <col style={{ width: "15%" }} />
+            <col style={{ width: "15%" }} />
+            <col style={{ width: "30%" }} />
+          </colgroup>
+
           <thead>
             <tr>
               <th>Produto</th>
-              <th>Atual</th>
-              <th>Mínimo</th>
+              <th className="numero">Atual</th>
+              <th className="numero">Mínimo</th>
               <th></th>
             </tr>
           </thead>
@@ -80,16 +88,33 @@ export default function Dashboard() {
             {emFalta.map((p) => (
               <tr key={p.id}>
                 <td>{p.nome}</td>
-                <td>{p.quantidade_atual}</td>
-                <td>{p.quantidade_minima}</td>
-                <td><Link to={`/movimentacoes/nova?produto_id=${p.id}`}><button>registrar entrada</button></Link></td>
+                <td className="numero">{p.quantidade_atual}</td>
+                <td className="numero">{p.quantidade_minima}</td>
+                <td>
+                 <Link to=
+                 {`/movimentacoes/nova?produto_id=${p.id}`}
+                      style={{
+                        background: "transparent",
+                        color: "var(--accent-bg)",
+                        border: "1px solid var(--accent-bg)",
+                        padding: "6px 12px ",
+                        borderRadius: 4,
+                        textDecoration: "none",
+                        fontSize: 13,
+
+                      }}
+                    >
+                      registrar entrada
+                    </Link>
+                
+                  </td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
 
-      <h2 style={{ marginTop: 32 }}>Últimas movimentações:</h2>
+      <h3 style={{ marginTop: 32 }}>Últimas movimentações:</h3>
       {movimentacoes.length === 0 ? (
         <p style={{ color: "var(--text-muted)" }}>Nenhuma movimentação registrada ainda.</p>
       ) : (
@@ -99,7 +124,7 @@ export default function Dashboard() {
               <th>Data</th>
               <th>Produto</th>
               <th>Tipo</th>
-              <th>Quantidade</th>
+              <th className="numero">Quantidade</th>
               <th>Motivo</th>
             </tr>
           </thead>
@@ -109,7 +134,7 @@ export default function Dashboard() {
                 <td>{new Date(m.criado_em).toLocaleString("pt-BR")}</td>
                 <td>{m.produtos.nome}</td>
                 <td>{m.tipo === "entrada" ? "Entrada" : "Saída"}</td>
-                <td>{m.quantidade} {m.produtos.unidade_medida}</td>
+                <td className="numero">{m.quantidade} {m.produtos.unidade_medida}</td>
                 <td>{m.motivo ?? "—"}</td>
               </tr>
             ))}

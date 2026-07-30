@@ -1,6 +1,7 @@
 import { Link, useLoaderData, useSubmit, Form } from "react-router";
 import { apiFetch } from "../../lib/api-client";
 import type { Route } from "./+types/lista";
+import { moeda } from "../../lib/formato";
 
 interface Produto {
   id: number;
@@ -64,15 +65,27 @@ export default function ListaProdutos() {
       </div>
 
       <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 16 }}>
+
+         <colgroup>
+            <col style={{ width: "26%" }} />
+            <col style={{ width: "16%" }} />
+            <col style={{ width: "12%" }} />
+            <col style={{ width: "10%" }} />
+            <col style={{ width: "13%" }} />
+            <col style={{ width: "13%" }} />
+            <col style={{ width: "10%" }} />
+          </colgroup>
+
         <thead>
             <th>Nome</th>
             <th>Categoria</th>
-            <th>Qtd. atual</th>
-            <th>Qtd. mínima</th>
-            <th>Preço de Custo</th>
-            <th>Preço de Venda</th>
+            <th className="numero">Estoque</th>
+            <th className="numero">Mínimo</th>
+            <th className="numero">Custo</th>
+            <th className="numero">Venda</th>
             <th></th>
         </thead>
+
         <tbody>
           {produtos.map((produto) => {
             const emFalta = Number(produto.quantidade_atual) < Number(produto.quantidade_minima);
@@ -85,13 +98,24 @@ export default function ListaProdutos() {
               >
                 <td>{produto.nome}</td>
                 <td>{produto.categorias?.nome ?? "—"}</td>
-                <td>{produto.quantidade_atual} {produto.unidade_medida}</td>
-                <td>{produto.quantidade_minima}</td>
-                <td>R$ {produto.preco_custo}</td>
-                <td>R$ {produto.preco_venda}</td>
-                <td>
-                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                  <Link to={`/produtos/${produto.id}/editar`}><button style={{background: "var(--edit-button-bg)", color: "var(--accent-text)"}}>editar</button></Link>
+                <td className="numero">{produto.quantidade_atual} {produto.unidade_medida}</td>
+                <td className="numero">{produto.quantidade_minima}</td>
+                <td className="numero">{moeda(produto.preco_custo)}</td>
+                <td className="numero">{moeda(produto.preco_venda)}</td>
+
+                <td style={{ paddingLeft: 20 }}>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <Link to={`/produtos/${produto.id}/editar`}><button
+                  type="submit"
+                  style={{
+                    background: "transparent", 
+                    color: "var(--edit-button-bg)",
+                    border: "1px solid var(--edit-button-bg)",
+                    fontSize: 13,
+                    padding: "4px 10px",
+                    }}>
+                      
+                      editar</button></Link>
                   <Form
                     method="post"
                     onSubmit={(e) => {
@@ -103,7 +127,13 @@ export default function ListaProdutos() {
                     <input type="hidden" name="id" value={produto.id} />
                     <button
                       type="submit"
-                      style={{ background: "var(--danger-solid-bg)", color: "var(--danger-solid-text)" }}
+                      style={{
+                        background: "transparent",
+                        color: "var(--danger-solid-bg)",
+                        border: "1px solid var(--danger-solid-bg)",
+                        fontSize: 13,
+                        padding: "4px 10px",
+                      }}
                     >
                       excluir
                     </button>

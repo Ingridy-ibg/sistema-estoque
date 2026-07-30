@@ -26,7 +26,7 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
     <Form method="post" style={{ maxWidth: 200, margin: "0 auto" }}>
   
       <div >
-        <label htmlFor="nome">Nome</label><br />
+        <label htmlFor="nome">Nome:</label><br />
         <input 
         id="nome" 
         name="nome" 
@@ -37,7 +37,7 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
       </div>
 
       <div style={{ marginTop: 12 }}>
-        <label htmlFor="categoria_id">Categoria</label><br />
+        <label htmlFor="categoria_id">Categoria:</label><br />
         <select 
         id="categoria_id" 
         name="categoria_id" 
@@ -50,7 +50,7 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
       </div>
 
       <div style={{ marginTop: 12 }}>
-        <label htmlFor="unidade_medida">Unidade de medida</label><br />
+        <label htmlFor="unidade_medida">Unidade de medida:</label><br />
           <input id="unidade_medida" 
           name="unidade_medida"
           type="text" 
@@ -59,7 +59,7 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
       </div>
 
       <div style={{ marginTop: 12 }}>
-        <label htmlFor="quantidade_minima">Quantidade mínima</label><br />
+        <label htmlFor="quantidade_minima">Quantidade mínima:</label><br />
         <input 
           id="quantidade_minima" 
           name="quantidade_minima" 
@@ -72,7 +72,7 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
       </div>
 
       <div style={{ marginTop: 12 }}>
-        <label htmlFor="preco_custo">Preço de Custo</label><br />
+        <label htmlFor="preco_custo">Preço de Custo:</label><br />
         <input 
         id="preco_custo" 
         name="preco_custo" 
@@ -85,7 +85,7 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
       </div>
 
         <div style={{ marginTop: 12 }}>
-        <label htmlFor="preco_venda">Preço de Venda</label><br />
+        <label htmlFor="preco_venda">Preço de Venda:</label><br />
         <input 
         id="preco_venda" 
         name="preco_venda" 

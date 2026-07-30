@@ -52,7 +52,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 
         <Form method="post" key={usuarios.length} style={{ marginTop: 16 }}>
             <div>
-            <label htmlFor="nome">Nome</label><br />
+            <label htmlFor="nome">Nome:</label><br />
             <input 
                 id="nome" 
                 name="nome" 
@@ -62,7 +62,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
             </div>
 
             <div style={{ marginTop: 12 }}>
-            <label htmlFor="email">E-mail</label><br />
+            <label htmlFor="email">E-mail:</label><br />
             <input 
                 id="email" 
                 name="email" 
@@ -72,7 +72,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
             </div>
 
             <div style={{ marginTop: 12 }}>
-            <label htmlFor="senha">Senha</label><br />
+            <label htmlFor="senha">Senha:</label><br />
             <input 
                 id="senha" 
                 name="senha" 
@@ -104,7 +104,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
                 <td>{u.email}</td>
                <td> 
                 {u.id === usuarioLogadoId ? (
-                <span style={{ color: "var(--text-muted)" }}>você</span>
+                <span style={{ color: "var(--text-muted)" }}></span>
             ) : (
                 <Form
                     method="post"
@@ -115,8 +115,14 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
                     <input type="hidden" name="intent" value="excluir" />
                     <input type="hidden" name="id" value={u.id} />
                     <button
-                        type="submit"
-                        style={{ background: "var(--danger-solid-bg)", color: "var(--danger-solid-text)" }}
+                      type="submit"
+                      style={{
+                        background: "transparent",
+                        color: "var(--danger-solid-bg)",
+                        border: "1px solid var(--danger-solid-bg)",
+                        fontSize: 13,
+                        padding: "4px 10px",
+                      }}
                     >
                         excluir
                     </button>
