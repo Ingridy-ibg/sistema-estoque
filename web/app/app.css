@@ -47,6 +47,16 @@ a {
   color: var(--link);
 }
 
+.link-discreto {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.link-discreto:hover {
+  color: var(--link);
+  text-decoration: underline;
+}
+
 input,
 select,
 button {

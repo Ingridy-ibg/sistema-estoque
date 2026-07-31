@@ -96,7 +96,10 @@ export default function ListaProdutos() {
                    emFalta ? "em-falta" : undefined
                 }
               >
-                <td>{produto.nome}</td>
+                <td>
+                <Link to={`/movimentacoes/nova?produto_id=${produto.id}`}
+                className="link-discreto">
+                  {produto.nome}</Link></td>
                 <td>{produto.categorias?.nome ?? "—"}</td>
                 <td className="numero">{produto.quantidade_atual} {produto.unidade_medida}</td>
                 <td className="numero">{produto.quantidade_minima}</td>

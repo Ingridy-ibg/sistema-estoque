@@ -85,7 +85,7 @@ export default function ListaCategorias() {
         <tbody>
           {categorias.map((categoria) => (
             <tr key={categoria.id}>
-              <td><Link to={`/produtos?categoria_id=${categoria.id}`} >{categoria.nome}</Link></td>
+              <td><Link to={`/produtos?categoria_id=${categoria.id}`} className="link-discreto">{categoria.nome}</Link></td>
               <td>{categoria.descricao ?? "—"}</td>
               <td >{categoria._count.produtos}</td>
               <td>
