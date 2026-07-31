@@ -1,4 +1,4 @@
-import { redirect, useLoaderData, useActionData, useNavigation, Form } from "react-router";
+import { redirect, useLoaderData, useActionData, useNavigation, Form, Link} from "react-router";
 import { apiFetch } from "../../lib/api-client";
 import type { Route } from "./+types/nova";
 import { useState } from "react";
@@ -138,11 +138,26 @@ export default function NovaMovimentacao() {
 
         {actionData?.erro && <p className="erro">{actionData.erro}</p>}
 
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
+      <div style={{ display: "flex", justifyContent: "center", gap: 12, marginTop: 24 }}>
+      
+      <Link
+        to="/produtos"
+        style={{
+          padding: "6px 12px",
+          border: "1px solid var(--border)",
+          borderRadius: 4,
+          textDecoration: "none",
+          color: "var(--text)",
+          display: "inline-flex",
+          alignItems: "center",
+          fontSize: 14,        
+        }}
+      >Cancelar</Link>
+
         <button 
         type="submit" 
         disabled={enviando} 
-        style={{ background: "var(--accent-bg)", color: "var(--accent-text)", marginTop: 16 }}>
+        style={{ background: "var(--accent-bg)", color: "var(--accent-text)"}}>
           {enviando ? "Registrando..." : "Registrar"}
         </button>
         </div>

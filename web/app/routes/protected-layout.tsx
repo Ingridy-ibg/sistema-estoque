@@ -25,7 +25,7 @@ export default function ProtectedLayout (){
     return (
         <div>
 
-            <header
+        <header
         style={{
           display: "flex",
           alignItems: "center",
@@ -42,12 +42,14 @@ export default function ProtectedLayout (){
               <NavLink to="/" end style={linkStyle}>Início</NavLink>
               <NavLink to="/categorias" style={linkStyle}>Categorias</NavLink>
               <NavLink to="/produtos" style={linkStyle}>Produtos</NavLink>
-              <NavLink to="/movimentacoes" style={linkStyle}>Histórico</NavLink>
+              <NavLink to="/movimentacoes" end style={linkStyle}>Histórico</NavLink>
               <NavLink to="/movimentacoes/nova" style={linkStyle}>Nova movimentação</NavLink>
             </nav>
 
             <div style={{ marginLeft: "auto", display: "flex", gap: 12, alignItems: "center" }}>
               {ehAdmin && <NavLink to="/usuarios" style={linkStyle}>Usuários</NavLink>}
+
+
               <button
                 onClick={() => {
                   clearToken();

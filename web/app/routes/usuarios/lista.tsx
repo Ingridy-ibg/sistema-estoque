@@ -1,4 +1,4 @@
-import { useLoaderData, useActionData, useNavigation, Form } from "react-router";
+import { useLoaderData, useActionData, useNavigation, Form, Link } from "react-router";
 import { apiFetch } from "../../lib/api-client";
 import type { Route } from "./+types/lista";
 import { getUsuarioId } from "../../lib/session";
@@ -60,7 +60,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
                 placeholder="nome" 
             required />
             </div>
-
+        
             <div style={{ marginTop: 12 }}>
             <label htmlFor="email">E-mail:</label><br />
             <input 
@@ -88,6 +88,17 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
             {enviando ? "Criando..." : "Criar usuário"}
             </button>
         </Form>
+
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 32 }}>
+                <h2 style={{ margin: 0, fontSize: 16 }}>Usuários ativos</h2>
+                <Link to="/usuarios/excluidos" className="link-acao">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
+                    <path d="M3 3v5h5" />
+                    </svg>
+                </Link>
+                </div>
+
 
         <table style={{ marginTop: 24 }}>
             <thead>

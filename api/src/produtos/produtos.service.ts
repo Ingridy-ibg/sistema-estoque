@@ -8,18 +8,30 @@ export class ProdutosService {
 
   constructor(private readonly prisma: PrismaService) {}
 
+
+
   async create(createProdutoDto: CreateProdutoDto) {
     await this.verificarCategoriaExiste(createProdutoDto.categoria_id);
 
-    const existente = await this.prisma.produtos.findFirst({
+    const ativo = await this.prisma.produtos.findFirst({
       where: {nome: createProdutoDto.nome, ativo: true},
     });
 
-    if (existente){
+    if (ativo){
       throw new ConflictException('Já existe um produto com esse nome');
+    }
+
+    const inativo = await this.prisma.produtos.findFirst({
+      where: { nome: createProdutoDto.nome, ativo: false}
+    });
+
+    if (inativo){
+      throw new ConflictException(`Existe um produto excluído com esse nome. Você pode reativá-lo em "Produtos excluídos".`);
     }
     return this.prisma.produtos.create({ data: createProdutoDto });
   }
+
+
 
   findAll(categoriaId?: string) {
     let where: {ativo:boolean; categoria_id? : number| null } = {ativo: true};
@@ -122,6 +134,42 @@ export class ProdutosService {
     return {valor_total: resultado[0].valor_atual };
   }
 
+  findInativos(){
+    return this.prisma.produtos.findMany({
+      where: { ativo: false },
+      orderBy: { nome: 'asc'},
+      include: { categorias: {select: { nome: true } } },
+    });
+  }
 
+
+  async reativar(id: number) {
+    
+    const produto = await this.prisma.produtos.findUnique({ where: { id } });
+
+    if (!produto) {
+      throw new NotFoundException(`Produto ${id} não existe`);
+    }
+
+    if (produto.ativo) {
+      throw new BadRequestException('Este produto já está ativo');
+    }
+
+    const conflito = await this.prisma.produtos.findFirst({
+      where: { nome: produto.nome, ativo: true },
+    });
+
+    if (conflito) {
+      throw new ConflictException(
+        `Já existe um produto ativo com o nome "${produto.nome}". Renomeie ou exclua o outro antes de reativar.`,
+      );
+    }
+
+    return this.prisma.produtos.update({
+      where: { id },
+      data: { ativo: true },
+    });
+  }
 }
+
 

@@ -12,9 +12,14 @@ export class UsuariosService {
 
         const existente = await this.prisma.usuarios.findUnique({where: {email} } );
 
-        if (existente){
+        if(existente){
+        if (existente.ativo){
             throw new ConflictException('Já existe um usuário com esse email');
         }
+        throw new ConflictException(
+      'Existe um usuário excluído com esse e-mail. Você pode reativá-lo em "Usuários excluídos".',
+    );
+    }
 
         const senha_hash = await bcrypt.hash(senha,10);
 
@@ -48,4 +53,31 @@ export class UsuariosService {
         select: { id: true, nome: true, email: true },
     });
     }
+
+    findInativos() {
+  return this.prisma.usuarios.findMany({
+    where: { ativo: false },
+    orderBy: { nome: 'asc' },
+    select: { id: true, nome: true, email: true },
+  });
+}
+
+async reativar(id: number) {
+  const usuario = await this.prisma.usuarios.findUnique({ where: { id } });
+
+  if (!usuario) {
+    throw new NotFoundException(`Usuário ${id} não existe`);
+  }
+
+  if (usuario.ativo) {
+    throw new BadRequestException('Este usuário já está ativo');
+  }
+
+  return this.prisma.usuarios.update({
+    where: { id },
+    data: { ativo: true },
+    select: { id: true, nome: true, email: true },
+  });
+}
+
 }

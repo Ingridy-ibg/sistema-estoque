@@ -21,7 +21,11 @@ export class ProdutosController{
   ) {
     return this.produtosService.findAll(categoriaId);
   }
-
+    
+  @Get('inativos')
+  findInativos() {
+    return this.produtosService.findInativos();
+  }
 
   @Get('em-falta')
   findEmFalta(){
@@ -52,4 +56,10 @@ export class ProdutosController{
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.produtosService.remove(id);
   }
+
+@Patch(':id/reativar')
+reativar(@Param('id', ParseIntPipe) id: number) {
+  return this.produtosService.reativar(id);
+}
+
 }

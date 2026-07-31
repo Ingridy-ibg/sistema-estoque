@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards, Delete, Param, ParseIntPipe, Req} from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Delete, Param, ParseIntPipe, Req, Patch } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -18,6 +18,15 @@ export class UsuariosController {
     @Get()
     findAll() {
         return this.usuariosService.findAll();
+    }
+    @Get('inativos')
+    findInativos() {
+    return this.usuariosService.findInativos();
+    }
+
+    @Patch(':id/reativar')
+    reativar(@Param('id', ParseIntPipe) id: number) {
+    return this.usuariosService.reativar(id);
     }
 
     @Delete(':id')

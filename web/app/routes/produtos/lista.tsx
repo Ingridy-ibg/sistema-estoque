@@ -49,10 +49,27 @@ export default function ListaProdutos() {
   return (
     <div>
       
-       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+            <h1 style={{ margin: 0, fontSize: 20 }}>Produtos</h1>
+          <Link
+            to="/produtos/novo"
+            style={{
+              background: "var(--accent-bg)",
+              color: "var(--accent-text)",
+              padding: "8px 14px",
+              borderRadius: 6,
+              textDecoration: "none",
+              fontSize: 14,
+            }}
+          >
+            + Novo produto
+          </Link>
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
         <Form method="get" onChange={(e) => submit(e.currentTarget)} style={{ marginTop: 16 }}>
-        <label htmlFor="categoria_id">Filtrar por categoria: </label>
-        <select id="categoria_id" name="categoria_id" defaultValue={categoriaId}>
+        <label htmlFor="categoria_id" style={{ fontSize: 14 }}>Filtrar por categoria: </label>
+        <select id="categoria_id" name="categoria_id" defaultValue={categoriaId} style={{ width: "auto" }}>
           <option value="">Todas</option>
            <option value="sem">Sem categoria</option>
           {categorias.map((c) => (
@@ -60,20 +77,38 @@ export default function ListaProdutos() {
           ))}
         </select>
       </Form>
-      
-        <Link to="/produtos/novo"><button style={{background: "var(--accent-bg)", color: "var(--accent-text)"}}>Novo Produto</button></Link>
-      </div>
+
+      <Link
+    to="/produtos/excluidos"
+    title="Ver produtos excluídos"
+    aria-label="Ver produtos excluídos"
+    style={{
+      display: "inline-flex",
+      alignItems: "center",
+      gap: 6,
+      fontSize: 13,
+      color: "var(--text-muted)",
+      textDecoration: "none",
+    }}
+  >
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
+      <path d="M3 3v5h5" />
+    </svg>
+  
+  </Link>
+</div>
 
       <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 16 }}>
 
          <colgroup>
             <col style={{ width: "26%" }} />
-            <col style={{ width: "16%" }} />
-            <col style={{ width: "12%" }} />
-            <col style={{ width: "10%" }} />
+            <col style={{ width: "20%" }} />
+            <col style={{ width: "11%" }} />
+            <col style={{ width: "8%" }} />
+            <col style={{ width: "11%" }} />
+            <col style={{ width: "11%" }} />
             <col style={{ width: "13%" }} />
-            <col style={{ width: "13%" }} />
-            <col style={{ width: "10%" }} />
           </colgroup>
 
         <thead>
