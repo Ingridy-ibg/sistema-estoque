@@ -15,6 +15,7 @@ interface Movimentacao {
   motivo: string | null;
   criado_em: string;
   produtos: { nome: string; unidade_medida: string };
+  usuarios: { nome: string };
 }
 
 export async function clientLoader() {
@@ -125,7 +126,7 @@ export default function Dashboard() {
               <th>Produto</th>
               <th>Tipo</th>
               <th className="numero">Quantidade</th>
-              <th>Motivo</th>
+              <th>Usuário</th>
             </tr>
           </thead>
           <tbody>
@@ -135,7 +136,7 @@ export default function Dashboard() {
                 <td>{m.produtos.nome}</td>
                 <td>{m.tipo === "entrada" ? "Entrada" : "Saída"}</td>
                 <td className="numero">{m.quantidade} {m.produtos.unidade_medida}</td>
-                <td>{m.motivo ?? "—"}</td>
+                <td>{m.usuarios.nome}</td>
               </tr>
             ))}
           </tbody>

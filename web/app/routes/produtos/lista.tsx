@@ -105,6 +105,7 @@ export default function ListaProdutos() {
 
                 <td style={{ paddingLeft: 20 }}>
                 <div style={{ display: "flex", gap: 8 }}>
+                  <Link to={`/produtos/${produto.id}/historico`}>histórico</Link>
                   <Link to={`/produtos/${produto.id}/editar`}><button
                   type="submit"
                   style={{

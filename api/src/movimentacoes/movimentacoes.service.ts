@@ -35,15 +35,53 @@ export class MovimentacoesService {
     });
   }
 
-  findAll(limite?: number) {
+  findAll(limite?: number, produtoId?: number, periodo?: string) {
+    const where: { produto_id?: number; criado_em?: { gte: Date } } = {};
+
+    if (produtoId){
+      where.produto_id = produtoId;
+    }
+
+    const desde = this.calcularDataInicio(periodo);
+    if (desde){
+      where.criado_em = { gte: desde };
+    }
+
     return this.prisma.movimentacoes.findMany({
+      where,
       orderBy: { criado_em: 'desc' },
       take: limite,
-      include: { produtos: { select: { nome: true, unidade_medida: true } } },
+      include: {
+         produtos: { select: { nome: true, unidade_medida: true } }, 
+         usuarios: { select: { nome: true } },
+      }, 
     });
   }
 
   findOne(id: number) {
     return this.prisma.movimentacoes.findUnique({ where: { id } });
+  }
+
+  private calcularDataInicio(periodo?: string): Date | undefined {
+    if (!periodo || periodo === 'todos') return undefined;
+
+    const inicio = new Date();
+
+    if (periodo === 'hoje') {
+      inicio.setHours(0, 0, 0, 0);
+      return inicio;
+    }
+    
+    if (periodo === 'semana') {
+      inicio.setDate(inicio.getDate() - 7);
+      return inicio;
+    }
+
+    if(periodo === 'mes'){
+      inicio.setDate(inicio.getDate() - 30);
+      return inicio;
+    }
+
+    return undefined;
   }
 }

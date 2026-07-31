@@ -10,6 +10,8 @@ export default [
     route("movimentacoes/nova", "routes/movimentacoes/nova.tsx"),
     route("categorias", "routes/categorias/lista.tsx"),
     route("usuarios", "routes/usuarios/lista.tsx"),
+    route("movimentacoes", "routes/movimentacoes/historico.tsx"),
+    route("produtos/:id/historico", "routes/produtos/historico.tsx"),
     ]),
     
 
