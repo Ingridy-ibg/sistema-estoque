@@ -45,7 +45,7 @@ export default function Historico() {
 
   return (
     <div>
-      <h1>Histórico de movimentações</h1>
+      <h2>Histórico de movimentações</h2>
 
       <Form
         method="get"

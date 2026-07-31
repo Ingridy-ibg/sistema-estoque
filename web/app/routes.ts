@@ -11,7 +11,6 @@ export default [
     route("categorias", "routes/categorias/lista.tsx"),
     route("usuarios", "routes/usuarios/lista.tsx"),
     route("movimentacoes", "routes/movimentacoes/historico.tsx"),
-    route("produtos/:id/historico", "routes/produtos/historico.tsx"),
     ]),
     
 
