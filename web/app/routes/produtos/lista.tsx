@@ -105,18 +105,43 @@ export default function ListaProdutos() {
 
                 <td style={{ paddingLeft: 20 }}>
                 <div style={{ display: "flex", gap: 8 }}>
-                  <Link to={`/movimentacoes?produto_id=${produto.id}&periodo=todos`}>histórico</Link>
-                  <Link to={`/produtos/${produto.id}/editar`}><button
-                  type="submit"
+
+          <td>
+          <div style = {{ display: "flex", gap: 4, alignItems: "center" }}>
+
+                  <Link
+                    to={`/movimentacoes?produto_id=${produto.id}&periodo=todos`}
+                    title="Histórico"
+                    aria-label="Histórico"
+                    style={{
+                      color: "var(--text-muted)",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      padding: 6,
+                    }}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M12 7v5l3 2" />
+                    </svg>
+                  </Link>
+
+                <Link
+                  to={`/produtos/${produto.id}/editar`}
+                  title="Editar"
+                  aria-label="Editar"
                   style={{
-                    background: "transparent", 
                     color: "var(--edit-button-bg)",
-                    border: "1px solid var(--edit-button-bg)",
-                    fontSize: 13,
-                    padding: "4px 10px",
-                    }}>
-                      
-                      editar</button></Link>
+                    display: "inline-flex",
+                    alignItems: "center",
+                    padding: 6,
+                  }}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                  </svg>
+                </Link>
+
                   <Form
                     method="post"
                     onSubmit={(e) => {
@@ -126,19 +151,30 @@ export default function ListaProdutos() {
                     }}
                   >
                     <input type="hidden" name="id" value={produto.id} />
-                    <button
-                      type="submit"
-                      style={{
-                        background: "transparent",
-                        color: "var(--danger-solid-bg)",
-                        border: "1px solid var(--danger-solid-bg)",
-                        fontSize: 13,
-                        padding: "4px 10px",
-                      }}
-                    >
-                      excluir
-                    </button>
+
+                   <button
+                    type="submit"
+                    title="Excluir"
+                    aria-label="Excluir"
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      padding: 6,
+                      color: "var(--danger-solid-bg)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z" />
+                      <path d="M10 11v6M14 11v6" />
+                    </svg>
+                  </button>
                   </Form>
+        </div>
+        </td> 
                 </div>
               </td>
               </tr>
