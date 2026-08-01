@@ -2,7 +2,6 @@ import { redirect, useLoaderData, useActionData } from "react-router";
 import { apiFetch } from "../../lib/api-client";
 import { ProdutoForm } from "../../components/produto-form";
 import type { Route } from "./+types/novo";
-import { findBotPattern } from "isbot";
 
 export async function clientLoader() {
   const categorias = await apiFetch("/categorias/selecao");
