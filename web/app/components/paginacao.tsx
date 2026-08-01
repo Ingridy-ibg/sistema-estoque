@@ -29,22 +29,22 @@ export function Paginacao({ pagina, totalPaginas, total, rotulo, param = "pagina
   return (
     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, marginTop: 20 }}>
       {pagina <= 1 ? (
-        <span style={{ ...estiloBase, color: "var(--text-muted)" }}>← anterior</span>
+        <span style={{ ...estiloBase, color: "var(--text-muted)" }}>←</span>
       ) : (
         <Link to={linkPara(pagina - 1)} style={{ ...estiloBase, color: "var(--link)" }}>
-          ← anterior
+          ←
         </Link>
       )}
 
       <span style={{ fontSize: 14, color: "var(--text-muted)" }}>
-        página {pagina} de {totalPaginas} ({total} {rotulo})
+         {pagina} / {totalPaginas}
       </span>
 
       {pagina >= totalPaginas ? (
-        <span style={{ ...estiloBase, color: "var(--text-muted)" }}>próxima →</span>
+        <span style={{ ...estiloBase, color: "var(--text-muted)" }}>→</span>
       ) : (
         <Link to={linkPara(pagina + 1)} style={{ ...estiloBase, color: "var(--link)" }}>
-          próxima →
+          →
         </Link>
       )}
     </div>

@@ -35,6 +35,7 @@ export class ProdutosService {
 
 
  async findAll(categoriaId?: string, pagina = 1, porPagina = 20) {
+  
     let where: {ativo:boolean; categoria_id? : number| null } = {ativo: true};
 
     if (categoriaId === 'sem' ) {
