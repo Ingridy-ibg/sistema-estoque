@@ -51,10 +51,15 @@ export default function NovaMovimentacao() {
 
   return (
     <div>
-      <Form method="post" style={{ maxWidth: 400, margin: "0 auto" }}>
+      <div className="cabecalho-pagina">
+        <h1>Nova movimentação</h1>
+      </div>
+
+      <div className="cartao formulario">
+      <Form method="post">
 
         <div>
-          <div><label htmlFor="busca">Buscar produto:</label><br /> 
+          <div><label htmlFor="busca">Buscar produto:</label><br />
           <input
           id= "busca"
           type= "text"
@@ -114,7 +119,7 @@ export default function NovaMovimentacao() {
           </select>
         </div>
 
-        <div style={{ marginTop: 12 }}>
+        <div>
           <label htmlFor="quantidade">Quantidade:</label><br />
           <input 
           id="quantidade" 
@@ -126,7 +131,7 @@ export default function NovaMovimentacao() {
           required />
         </div>
 
-        <div style={{ marginTop: 12 }}>
+        <div>
           <label htmlFor="motivo">Motivo (opcional):</label><br />
           <input 
           id="motivo" 
@@ -138,31 +143,16 @@ export default function NovaMovimentacao() {
 
         {actionData?.erro && <p className="erro">{actionData.erro}</p>}
 
-      <div style={{ display: "flex", justifyContent: "center", gap: 12, marginTop: 24 }}>
-      
-      <Link
-        to="/produtos"
-        style={{
-          padding: "6px 12px",
-          border: "1px solid var(--border)",
-          borderRadius: 4,
-          textDecoration: "none",
-          color: "var(--text)",
-          display: "inline-flex",
-          alignItems: "center",
-          fontSize: 14,        
-        }}
-      >Cancelar</Link>
+        <div className="acoes-formulario">
+          <Link to="/produtos" className="botao-secundario">Cancelar</Link>
 
-        <button 
-        type="submit" 
-        disabled={enviando} 
-        style={{ background: "var(--accent-bg)", color: "var(--accent-text)"}}>
-          {enviando ? "Registrando..." : "Registrar"}
-        </button>
+          <button type="submit" disabled={enviando} className="botao-primario">
+            {enviando ? "Registrando..." : "Registrar"}
+          </button>
         </div>
 
       </Form>
+      </div>
     </div>
   );
 }

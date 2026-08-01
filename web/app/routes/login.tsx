@@ -28,29 +28,31 @@ export default function Login(){
     const enviando = navigation.state === "submitting";
 
     return (
-        <div style = {{ maxWidth: 360, margin: "80px auto", fontFamily: "sans-serif"}}>
-            <h2>Login</h2>
-            <Form method="post">
+        <div style = {{ maxWidth: 360, margin: "80px auto" }}>
+            <div className="cartao" style={{ padding: 24 }}>
+            <h1 style={{ margin: "0 0 20px", fontSize: 20 }}>Estoque</h1>
+
+            <Form method="post" className="formulario">
 
                 <div>
                     <label htmlFor= "email">E-mail</label>
                     <br />
-                   <input 
-                   id= "email" 
-                   name="email" 
+                   <input
+                   id= "email"
+                   name="email"
                    type="email"
-                   placeholder= "digite aqui" 
+                   placeholder= "digite aqui"
                    required/>
                 </div>
-                
-                <div style={{marginTop: 12}}>
+
+                <div>
                     <label htmlFor="senha">Senha</label>
                     <br />
-                    <input 
-                    id= "senha" 
-                    name="senha" 
+                    <input
+                    id= "senha"
+                    name="senha"
                     type="password"
-                    placeholder= "digite aqui" 
+                    placeholder= "digite aqui"
                     required/>
                 </div>
 
@@ -58,10 +60,16 @@ export default function Login(){
                     <p className="erro">{actionData.erro}</p>
                 )}
 
-                <button type = "submit" disabled={enviando} style={{ marginTop: 16 }}>
+                <button
+                    type = "submit"
+                    disabled={enviando}
+                    className="botao-primario"
+                    style={{ marginTop: 20, width: "100%", justifyContent: "center" }}
+                >
                     {enviando ? "Entrando..." : "Entrar"}
                 </button>
             </Form>
+            </div>
             </div>
     );
 }

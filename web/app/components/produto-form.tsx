@@ -23,9 +23,10 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
   const enviando = navigation.state === "submitting";
 
   return (
-    <Form method="post" style={{ maxWidth: 200, margin: "0 auto" }}>
-  
-      <div >
+    <div className="cartao formulario">
+    <Form method="post">
+
+      <div>
         <label htmlFor="nome">Nome:</label><br />
         <input 
         id="nome" 
@@ -36,7 +37,7 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
         required />
       </div>
 
-      <div style={{ marginTop: 12 }}>
+      <div>
         <label htmlFor="categoria_id">Categoria:</label><br />
         <select 
         id="categoria_id" 
@@ -49,7 +50,7 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
         </select>
       </div>
 
-      <div style={{ marginTop: 12 }}>
+      <div>
         <label htmlFor="unidade_medida">Unidade de medida:</label><br />
           <input id="unidade_medida" 
           name="unidade_medida"
@@ -58,7 +59,7 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
           placeholder="saco, kg, unidade..." required />
       </div>
 
-      <div style={{ marginTop: 12 }}>
+      <div>
         <label htmlFor="quantidade_minima">Quantidade mínima:</label><br />
         <input 
           id="quantidade_minima" 
@@ -71,7 +72,7 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
           required />
       </div>
 
-      <div style={{ marginTop: 12 }}>
+      <div>
         <label htmlFor="preco_custo">Preço de Custo:</label><br />
         <input 
         id="preco_custo" 
@@ -84,7 +85,7 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
         required />
       </div>
 
-        <div style={{ marginTop: 12 }}>
+        <div>
         <label htmlFor="preco_venda">Preço de Venda:</label><br />
         <input 
         id="preco_venda" 
@@ -97,27 +98,15 @@ export function ProdutoForm({ categorias, produto, erro }: ProdutoFormProps) {
         required />
       </div>
 
-      {erro && <p style={{ color: "red" }}>{erro}</p>}
+      {erro && <p className="erro">{erro}</p>}
 
-      <div style={{ display: "flex", justifyContent: "center", gap: 12, marginTop: 24 }}>
-      <Link
-        to="/produtos"
-        style={{
-          padding: "6px 12px",
-          border: "1px solid var(--border)",
-          borderRadius: 4,
-          textDecoration: "none",
-          color: "var(--text)",
-        }}
-      >Cancelar</Link>
-      <button
-        type="submit"
-        disabled={enviando}
-        style={{ background: "var(--accent-bg)", color: "var(--accent-text)" }}
-      >
-        {enviando ? "Salvando..." : "Salvar"}
-      </button>
-    </div>
+      <div className="acoes-formulario">
+        <Link to="/produtos" className="botao-secundario">Cancelar</Link>
+        <button type="submit" disabled={enviando} className="botao-primario">
+          {enviando ? "Salvando..." : "Salvar"}
+        </button>
+      </div>
     </Form>
+    </div>
   );
 }

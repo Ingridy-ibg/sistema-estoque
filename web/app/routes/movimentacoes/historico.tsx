@@ -1,4 +1,4 @@
-import { useLoaderData, useSubmit, Form } from "react-router";
+import { Link, useLoaderData, useSubmit, Form } from "react-router";
 import { apiFetch } from "../../lib/api-client";
 import type { Route } from "./+types/historico";
 import { Paginacao } from "../../components/paginacao";
@@ -58,42 +58,57 @@ export default function Historico() {
 
   return (
     <div>
-      <h2>Histórico de movimentações</h2>
+      <div className="cabecalho-pagina">
+        <h1>Histórico de movimentações</h1>
+        <Link to="/movimentacoes/nova" className="botao-primario">
+          + Nova movimentação
+        </Link>
+      </div>
 
-      <Form
-        method="get"
-        onChange={(e) => submit(e.currentTarget)}
-        style={{ marginTop: 16, display: "flex", gap: 16, alignItems: "flex-end" }}
-      >
-        <input type="hidden" name="pagina" value="1" />
+      <div className="barra-filtros">
+        <Form method="get" onChange={(e) => submit(e.currentTarget)}>
+          <input type="hidden" name="pagina" value="1" />
 
-        <div>
-          <label htmlFor="produto_id">Produto</label><br />
-          <select id="produto_id" name="produto_id" defaultValue={produtoId}>
+          <select
+            id="produto_id"
+            name="produto_id"
+            defaultValue={produtoId}
+            aria-label="Filtrar por produto"
+            style={{ width: "auto" }}
+          >
             <option value="">Todos os produtos</option>
             {produtos.map((p) => (
               <option key={p.id} value={p.id}>{p.nome}</option>
             ))}
           </select>
-        </div>
 
-        <div>
-          <label htmlFor="periodo">Período</label><br />
-          <select id="periodo" name="periodo" defaultValue={periodo}>
+          <select
+            id="periodo"
+            name="periodo"
+            defaultValue={periodo}
+            aria-label="Filtrar por período"
+            style={{ width: "auto" }}
+          >
             <option value="hoje">Hoje</option>
             <option value="semana">Últimos 7 dias</option>
             <option value="mes">Últimos 30 dias</option>
             <option value="todos">Todos</option>
           </select>
-        </div>
-      </Form>
+        </Form>
+      </div>
+
+      {total > 0 && (
+        <p className="resumo">
+          {total} {total === 1 ? "movimentação" : "movimentações"}
+        </p>
+      )}
 
       {movimentacoes.length === 0 ? (
-        <p style={{ color: "var(--text-muted)", marginTop: 24 }}>
+        <p className="vazio">
           Nenhuma movimentação {periodo === "hoje" ? "hoje" : "encontrada com esses filtros"}.
         </p>
       ) : (
-        <table style={{ marginTop: 24 }}>
+        <table>
           <colgroup>
             <col style={{ width: "18%" }} />
             <col style={{ width: "27%" }} />
@@ -120,7 +135,9 @@ export default function Historico() {
                 <td style={{ color: m.tipo === "entrada" ? "var(--accent-bg)" : "var(--danger-solid-bg)" }}>
                   {m.tipo === "entrada" ? "Entrada" : "Saída"}
                 </td>
-                <td className="numero">{m.quantidade} {m.produtos.unidade_medida}</td>
+                <td className="numero">
+                  {m.quantidade} <span className="unidade">{m.produtos.unidade_medida}</span>
+                </td>
                 <td>{m.motivo ?? "—"}</td>
                 <td>{m.usuarios.nome}</td>
               </tr>

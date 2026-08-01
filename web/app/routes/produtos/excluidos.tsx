@@ -31,33 +31,29 @@ export default function ProdutosExcluidos() {
 
   return (
     <div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-        <h1 style={{ margin: 0, fontSize: 20 }}>Produtos excluídos</h1>
+      <div className="cabecalho-pagina">
+        <h1>Produtos excluídos</h1>
 
-        <Link
-            to="/produtos"
-            style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 6,
-            fontSize: 13,
-            color: "var(--text-muted)",
-            textDecoration: "none",
-            }}
-        >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <Link to="/produtos" className="link-acao">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-            voltar
+          </svg>
+          voltar
         </Link>
-        </div>
+      </div>
 
       {actionData?.erro && <p className="erro">{actionData.erro}</p>}
 
       {produtos.length === 0 ? (
-        <p style={{ color: "var(--text-muted)" }}>Nenhum produto excluído.</p>
+        <p className="vazio">Nenhum produto excluído.</p>
       ) : (
-        <table style={{ marginTop: 16 }}>
+        <table>
+          <colgroup>
+            <col style={{ width: "45%" }} />
+            <col style={{ width: "40%" }} />
+            <col style={{ width: "15%" }} />
+          </colgroup>
+
           <thead>
             <tr>
               <th>Nome</th>
@@ -70,11 +66,13 @@ export default function ProdutosExcluidos() {
               <tr key={p.id}>
                 <td>{p.nome}</td>
                 <td>{p.categorias?.nome ?? "—"}</td>
-                <td>
-                  <Form method="post">
-                    <input type="hidden" name="id" value={p.id} />
-                    <button type="submit">reativar</button>
-                  </Form>
+                <td className="acoes">
+                  <div>
+                    <Form method="post">
+                      <input type="hidden" name="id" value={p.id} />
+                      <button type="submit" className="botao-secundario">reativar</button>
+                    </Form>
+                  </div>
                 </td>
               </tr>
             ))}

@@ -31,33 +31,29 @@ export default function UsuariosExcluidos() {
   return (
     
     <div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-        <h1 style={{ margin: 0, fontSize: 20 }}>Usuários excluídos</h1>
+      <div className="cabecalho-pagina">
+        <h1>Usuários excluídos</h1>
 
-        <Link
-            to="/usuarios"
-            style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 6,
-            fontSize: 13,
-            color: "var(--text-muted)",
-            textDecoration: "none",
-            }}
-        >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <Link to="/usuarios" className="link-acao">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-            voltar
+          </svg>
+          voltar
         </Link>
-        </div>
+      </div>
 
       {actionData?.erro && <p className="erro">{actionData.erro}</p>}
 
       {usuarios.length === 0 ? (
-        <p style={{ color: "var(--text-muted)" }}>Nenhum usuário excluído.</p>
+        <p className="vazio">Nenhum usuário excluído.</p>
       ) : (
-        <table style={{ marginTop: 16 }}>
+        <table>
+          <colgroup>
+            <col style={{ width: "40%" }} />
+            <col style={{ width: "45%" }} />
+            <col style={{ width: "15%" }} />
+          </colgroup>
+
           <thead>
             <tr>
               <th>Nome</th>
@@ -70,11 +66,13 @@ export default function UsuariosExcluidos() {
             <tr key={u.id}>
                 <td>{u.nome}</td>
                 <td>{u.email}</td>
-                <td>
-                <Form method="post">
-                    <input type="hidden" name="id" value={u.id} />
-                    <button type="submit">reativar</button>
-                </Form>
+                <td className="acoes">
+                  <div>
+                    <Form method="post">
+                      <input type="hidden" name="id" value={u.id} />
+                      <button type="submit" className="botao-secundario">reativar</button>
+                    </Form>
+                  </div>
                 </td>
             </tr>
             ))}

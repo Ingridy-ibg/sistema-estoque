@@ -3,6 +3,15 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateProdutoDto } from './dto/create-produto.dto';
 import { UpdateProdutoDto } from './dto/update-produto.dto';
 import { calcularPaginacao, PADRAO_POR_PAGINA } from '../common/paginacao';
+import { Prisma } from '../generated/prisma/client';
+
+interface FiltrosProdutos {
+  categoriaId?: string;
+  busca?: string;
+  emFalta?: boolean;
+  pagina?: number;
+  porPagina?: number;
+}
 
 @Injectable()
 export class ProdutosService {
@@ -34,18 +43,28 @@ export class ProdutosService {
 
 
 
- async findAll(categoriaId?: string, pagina = 1, porPagina = 20) {
-  
-    let where: {ativo:boolean; categoria_id? : number| null } = {ativo: true};
+ async findAll({ categoriaId, busca, emFalta, pagina = 1, porPagina = PADRAO_POR_PAGINA }: FiltrosProdutos = {}) {
+
+    const where: Prisma.produtosWhereInput = { ativo: true };
 
     if (categoriaId === 'sem' ) {
-      where = { ...where, categoria_id: null };
+      where.categoria_id = null;
     }else if (categoriaId){
       const id = Number(categoriaId);
       if (Number.isNaN(id)){
         throw new BadRequestException('categoria_id invalido');
       }
-      where = { ...where, categoria_id: id };
+      where.categoria_id = id;
+    }
+
+    const termo = busca?.trim();
+    if (termo){
+      where.nome = { contains: termo, mode: 'insensitive' };
+    }
+
+    if (emFalta){
+      // comparação entre colunas: estoque atual abaixo do mínimo do próprio produto
+      where.quantidade_atual = { lt: this.prisma.produtos.fields.quantidade_minima };
     }
 
     const total = await this.prisma.produtos.count({ where });

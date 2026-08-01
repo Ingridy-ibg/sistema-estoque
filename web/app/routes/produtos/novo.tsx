@@ -37,6 +37,9 @@ export default function NovoProduto() {
   const actionData = useActionData<typeof clientAction>();
   return (
     <div>
+      <div className="cabecalho-pagina">
+        <h1>Novo produto</h1>
+      </div>
       <ProdutoForm categorias={categorias} erro={actionData?.erro} />
     </div>
   );

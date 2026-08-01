@@ -49,6 +49,9 @@ export default function EditarProduto() {
 
   return (
     <div>
+      <div className="cabecalho-pagina">
+        <h1>Editar produto</h1>
+      </div>
       <ProdutoForm categorias={categorias} produto={produto} erro={actionData?.erro} />
     </div>
   );

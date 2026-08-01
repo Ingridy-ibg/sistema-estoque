@@ -20,6 +20,12 @@ interface Categoria {
   nome: string;
 }
 
+const botaoIcone = {
+  display: "inline-flex",
+  alignItems: "center",
+  padding: 6,
+} as const;
+
 export async function clientAction({ request }: Route.ClientActionArgs) {
   const formData = await request.formData();
 
@@ -34,10 +40,14 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 export async function clientLoader( { request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
   const categoriaId = url.searchParams.get("categoria_id") ?? "";
+  const busca = url.searchParams.get("busca") ?? "";
+  const emFalta = url.searchParams.get("em_falta") === "1";
   const pagina = url.searchParams.get("pagina") ?? "1";
 
   const params = new URLSearchParams();
   if (categoriaId) params.set("categoria_id", categoriaId);
+  if (busca) params.set("busca", busca);
+  if (emFalta) params.set("em_falta", "1");
   params.set("pagina", pagina);
 
   const [resposta, categorias] = await Promise.all([
@@ -60,71 +70,109 @@ export async function clientLoader( { request }: Route.ClientLoaderArgs) {
     totalPaginas: dados.totalPaginas,
     categorias: categorias as Categoria[],
     categoriaId,
+    busca,
+    emFalta,
   };
 
 } 
 
 export default function ListaProdutos() {
-  const { produtos, total, pagina, totalPaginas, categorias, categoriaId } =
+  const { produtos, total, pagina, totalPaginas, categorias, categoriaId, busca, emFalta } =
   useLoaderData<typeof clientLoader>();
   const submit = useSubmit();
 
+  // digitar troca a URL a cada tecla: `replace` evita encher o histórico de voltas
+  const aoMudarFiltro = (evento: React.FormEvent<HTMLFormElement>) => {
+    const digitando = (evento.target as HTMLElement).id === "busca";
+    submit(evento.currentTarget, { replace: digitando });
+  };
+
   return (
     <div>
-      
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-            <h1 style={{ margin: 0, fontSize: 20 }}>Produtos</h1>
-          <Link
-            to="/produtos/novo"
-            style={{
-              background: "var(--accent-bg)",
-              color: "var(--accent-text)",
-              padding: "8px 14px",
-              borderRadius: 6,
-              textDecoration: "none",
-              fontSize: 14,
-            }}
-          >
-            + Novo produto
-          </Link>
-        </div>
+      <div className="cabecalho-pagina">
+        <h1>Produtos</h1>
+        <Link to="/produtos/novo" className="botao-primario">
+          + Novo produto
+        </Link>
+      </div>
 
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-
-       <Form method="get" onChange={(e) => submit(e.currentTarget)}>
+      <div className="barra-filtros">
+        <Form method="get" onChange={aoMudarFiltro}>
           <input type="hidden" name="pagina" value="1" />
-          <label htmlFor="categoria_id">Filtrar por categoria: </label>
-          <select id="categoria_id" name="categoria_id" defaultValue={categoriaId} style={{ width: "auto" }}>
-          <option value="">Todas</option>
-           <option value="sem">Sem categoria</option>
-          {categorias.map((c) => (
-            <option key={c.id} value={c.id}>{c.nome}</option>
-          ))}
-        </select>
-      </Form>
 
-      <Link
-    to="/produtos/excluidos"
-    title="Ver produtos excluídos"
-    aria-label="Ver produtos excluídos"
-    style={{
-      display: "inline-flex",
-      alignItems: "center",
-      gap: 6,
-      fontSize: 13,
-      color: "var(--text-muted)",
-      textDecoration: "none",
-    }}
-  >
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
-      <path d="M3 3v5h5" />
-    </svg>
-  
-  </Link>
-</div>
+          <div className="campo-busca">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M20 20l-3.5-3.5" />
+            </svg>
+            <input
+              id="busca"
+              name="busca"
+              type="search"
+              defaultValue={busca}
+              placeholder="Pesquisar produto..."
+              aria-label="Pesquisar produto"
+            />
+          </div>
 
-      <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 16 }}>
+          <select
+            id="categoria_id"
+            name="categoria_id"
+            defaultValue={categoriaId}
+            aria-label="Filtrar por categoria"
+            style={{ width: "auto" }}
+          >
+            <option value="">Todas as categorias</option>
+            <option value="sem">Sem categoria</option>
+            {categorias.map((c) => (
+              <option key={c.id} value={c.id}>{c.nome}</option>
+            ))}
+          </select>
+
+          <label htmlFor="em_falta" className={emFalta ? "pilula ativa" : "pilula"}>
+            <input
+              id="em_falta"
+              name="em_falta"
+              type="checkbox"
+              value="1"
+              defaultChecked={emFalta}
+            />
+            Apenas em falta
+          </label>
+        </Form>
+
+        <Link
+          to="/produtos/excluidos"
+          title="Ver produtos excluídos"
+          className="link-acao"
+          style={{ marginLeft: "auto" }}
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
+            <path d="M3 3v5h5" />
+          </svg>
+          Excluídos
+        </Link>
+      </div>
+
+      {total > 0 && (
+        <p className="resumo">
+          {total} {total === 1 ? "produto" : "produtos"}
+          {busca && ` para "${busca}"`}
+          {emFalta && " abaixo do estoque mínimo"}
+        </p>
+      )}
+
+      {produtos.length === 0 ? (
+        <p className="vazio">
+          {busca
+            ? `Nenhum produto encontrado para "${busca}".`
+            : emFalta
+              ? "Nenhum produto abaixo do estoque mínimo."
+              : "Nenhum produto nessa categoria."}
+        </p>
+      ) : (
+      <table>
 
          <colgroup>
             <col style={{ width: "26%" }} />
@@ -137,6 +185,7 @@ export default function ListaProdutos() {
           </colgroup>
 
         <thead>
+          <tr>
             <th>Nome</th>
             <th>Categoria</th>
             <th className="numero">Estoque</th>
@@ -144,6 +193,7 @@ export default function ListaProdutos() {
             <th className="numero">Custo</th>
             <th className="numero">Venda</th>
             <th></th>
+          </tr>
         </thead>
 
         <tbody>
@@ -157,96 +207,82 @@ export default function ListaProdutos() {
                 }
               >
                 <td>
-                <Link to={`/movimentacoes/nova?produto_id=${produto.id}`}
-                className="link-discreto">
-                  {produto.nome}</Link></td>
+                  <Link
+                    to={`/movimentacoes/nova?produto_id=${produto.id}`}
+                    className="link-discreto"
+                  >
+                    {produto.nome}
+                  </Link>
+                </td>
                 <td>{produto.categorias?.nome ?? "—"}</td>
-                <td className="numero">{produto.quantidade_atual} {produto.unidade_medida}</td>
+                <td className="numero">
+                  {produto.quantidade_atual} <span className="unidade">{produto.unidade_medida}</span>
+                </td>
                 <td className="numero">{produto.quantidade_minima}</td>
                 <td className="numero">{moeda(produto.preco_custo)}</td>
                 <td className="numero">{moeda(produto.preco_venda)}</td>
 
-                <td style={{ paddingLeft: 20 }}>
-                <div style={{ display: "flex", gap: 8 }}>
+                <td className="acoes">
+                  <div>
+                    <Link
+                      to={`/movimentacoes?produto_id=${produto.id}&periodo=todos`}
+                      title="Histórico"
+                      aria-label="Histórico"
+                      style={{ ...botaoIcone, color: "var(--text-muted)" }}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="9" />
+                        <path d="M12 7v5l3 2" />
+                      </svg>
+                    </Link>
 
-          <td>
-          <div style = {{ display: "flex", gap: 4, alignItems: "center" }}>
+                    <Link
+                      to={`/produtos/${produto.id}/editar`}
+                      title="Editar"
+                      aria-label="Editar"
+                      style={{ ...botaoIcone, color: "var(--edit-button-bg)" }}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                      </svg>
+                    </Link>
 
-                  <Link
-                    to={`/movimentacoes?produto_id=${produto.id}&periodo=todos`}
-                    title="Histórico"
-                    aria-label="Histórico"
-                    style={{
-                      color: "var(--text-muted)",
-                      display: "inline-flex",
-                      alignItems: "center",
-                      padding: 6,
-                    }}
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="9" />
-                      <path d="M12 7v5l3 2" />
-                    </svg>
-                  </Link>
+                    <Form
+                      method="post"
+                      onSubmit={(e) => {
+                        if (!confirm(`Excluir "${produto.nome}"?`)) {
+                          e.preventDefault();
+                        }
+                      }}
+                    >
+                      <input type="hidden" name="id" value={produto.id} />
 
-                <Link
-                  to={`/produtos/${produto.id}/editar`}
-                  title="Editar"
-                  aria-label="Editar"
-                  style={{
-                    color: "var(--edit-button-bg)",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    padding: 6,
-                  }}
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                  </svg>
-                </Link>
-
-                  <Form
-                    method="post"
-                    onSubmit={(e) => {
-                      if (!confirm(`Excluir "${produto.nome}"?`)) {
-                        e.preventDefault();
-                      }
-                    }}
-                  >
-                    <input type="hidden" name="id" value={produto.id} />
-
-                   <button
-                    type="submit"
-                    title="Excluir"
-                    aria-label="Excluir"
-                    style={{
-                      background: "transparent",
-                      border: "none",
-                      padding: 6,
-                      color: "var(--danger-solid-bg)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      cursor: "pointer",
-                    }}
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z" />
-                      <path d="M10 11v6M14 11v6" />
-                    </svg>
-                  </button>
-                  </Form>
-        </div>
-        </td> 
-                </div>
-              </td>
+                      <button
+                        type="submit"
+                        title="Excluir"
+                        aria-label="Excluir"
+                        style={{
+                          ...botaoIcone,
+                          color: "var(--danger-solid-bg)",
+                          background: "transparent",
+                          border: "none",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z" />
+                          <path d="M10 11v6M14 11v6" />
+                        </svg>
+                      </button>
+                    </Form>
+                  </div>
+                </td>
               </tr>
             );
           })}
         </tbody>
       </table>
-
-      {produtos.length === 0 && <p>Nenhum produto nessa categoria.</p>}
+      )}
 
       <Paginacao pagina={pagina} totalPaginas={totalPaginas} total={total} rotulo="produtos" />
 

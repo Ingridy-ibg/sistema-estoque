@@ -54,39 +54,61 @@ export default function ListaCategorias() {
 
   return (
     <div>
-      <Form method="post" style={{ marginTop: 16, display: "flex", gap: 8, alignItems: "flex-end" }}>
-        <div>
-          <label htmlFor="nome">Nome</label><br />
-          <input 
-          id="nome" 
-          name="nome" 
-          type="text"
-          placeholder= "digite aqui"
-          required />
-        </div>
+      <div className="cabecalho-pagina">
+        <h1>Categorias</h1>
+      </div>
 
-        <div>
-          <label htmlFor="descricao">Descrição (opcional)</label><br />
-          <input 
-          id="descricao" 
-          name="descricao" 
-          type="text"
-          placeholder= "digite aqui" />
-        </div>
+      <div className="cartao">
+        <Form method="post" style={{ display: "flex", gap: 12, alignItems: "flex-end", flexWrap: "wrap" }}>
+          <div style={{ flex: "1 1 180px" }}>
+            <label htmlFor="nome" style={{ fontSize: 13, color: "var(--text-muted)" }}>Nome</label><br />
+            <input
+            id="nome"
+            name="nome"
+            type="text"
+            placeholder= "digite aqui"
+            required />
+          </div>
 
-        <button type="submit" disabled={enviando}>
-          {enviando ? "Salvando..." : "Adicionar"}
-        </button>
-      </Form>
+          <div style={{ flex: "2 1 240px" }}>
+            <label htmlFor="descricao" style={{ fontSize: 13, color: "var(--text-muted)" }}>Descrição (opcional)</label><br />
+            <input
+            id="descricao"
+            name="descricao"
+            type="text"
+            placeholder= "digite aqui" />
+          </div>
+
+          <button type="submit" disabled={enviando} className="botao-primario">
+            {enviando ? "Salvando..." : "Adicionar"}
+          </button>
+        </Form>
+      </div>
 
       {actionData?.erro && <p className="erro">{actionData.erro}</p>}
 
-      <table style={{ marginTop: 24 }}>
+      {total > 0 && (
+        <p className="resumo" style={{ marginTop: 20 }}>
+          {total} {total === 1 ? "categoria" : "categorias"}
+        </p>
+      )}
+
+      {categorias.length === 0 ? (
+        <p className="vazio">Nenhuma categoria cadastrada ainda.</p>
+      ) : (
+      <table>
+        <colgroup>
+          <col style={{ width: "30%" }} />
+          <col style={{ width: "44%" }} />
+          <col style={{ width: "13%" }} />
+          <col style={{ width: "13%" }} />
+        </colgroup>
+
         <thead>
           <tr>
             <th>Nome</th>
             <th>Descrição</th>
-            <th>Produtos</th>
+            <th className="numero">Produtos</th>
             <th></th>
           </tr>
         </thead>
@@ -96,8 +118,9 @@ export default function ListaCategorias() {
             <tr key={categoria.id}>
               <td><Link to={`/produtos?categoria_id=${categoria.id}`} className="link-discreto">{categoria.nome}</Link></td>
               <td>{categoria.descricao ?? "—"}</td>
-              <td >{categoria._count.produtos}</td>
-              <td>
+              <td className="numero">{categoria._count.produtos}</td>
+              <td className="acoes">
+                <div>
                 <Form method="post"
                    onSubmit={(e) => {
                     if (!confirm(`Excluir a categoria "${categoria.nome}"?`)) {
@@ -128,11 +151,13 @@ export default function ListaCategorias() {
                     </svg>
                   </button>
                 </Form>
+                </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      )}
 
       <Paginacao pagina={pagina} totalPaginas={totalPaginas} total={total} rotulo="categorias" />
     </div>

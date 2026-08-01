@@ -32,7 +32,7 @@ export default function MinhaSenha() {
 
   return (
     <div style={{ maxWidth: 420, margin: "40px auto" }}>
-      <div style={{ border: "1px solid var(--border)", borderRadius: 8, padding: 24 }}>
+      <div className="cartao" style={{ padding: 24 }}>
         <h1 style={{ margin: 0, fontSize: 18 }}>Alterar minha senha</h1>
 
         <Form method="post" key={actionData?.ok ? "limpo" : "form"} style={{ marginTop: 24 }}>
@@ -52,27 +52,19 @@ export default function MinhaSenha() {
             <p style={{ color: "var(--accent-bg)", fontSize: 14 }}>Senha alterada com sucesso.</p>
           )}
 
-          <button
-            type="submit"
-            disabled={enviando}
-            style={{
-              marginTop: 24,
-              width: "100%",
-              background: "var(--accent-bg)",
-              color: "var(--accent-text)",
-              padding: "9px 14px",
-            }}
-          >
-            {enviando ? "Alterando..." : "Alterar senha"}
-          </button>
+          <div className="acoes-formulario">
+            <button
+              type="button"
+              onClick={() => navigate("/")}
+              className="botao-secundario"
+            >
+              Cancelar
+            </button>
 
-          <button
-            type="button"
-            onClick={() => navigate("/")}
-            style={{ marginTop: 12, width: "100%", padding: "9px 14px" }}
-          >
-            Cancelar
-          </button>
+            <button type="submit" disabled={enviando} className="botao-primario">
+              {enviando ? "Alterando..." : "Alterar senha"}
+            </button>
+          </div>
         </Form>
       </div>
     </div>

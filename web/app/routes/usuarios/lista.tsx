@@ -67,61 +67,79 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
     return (
         <div>
 
-        <Form method="post" key={total} style={{ marginTop: 16 }}>
+        <div className="cabecalho-pagina">
+            <h1>Usuários</h1>
+        </div>
+
+        <div className="cartao">
+        <Form method="post" key={total} className="formulario">
             <div>
             <label htmlFor="nome">Nome:</label><br />
-            <input 
-                id="nome" 
-                name="nome" 
-                type="text" 
-                placeholder="nome" 
+            <input
+                id="nome"
+                name="nome"
+                type="text"
+                placeholder="nome"
             required />
             </div>
-        
-            <div style={{ marginTop: 12 }}>
+
+            <div>
             <label htmlFor="email">E-mail:</label><br />
-            <input 
-                id="email" 
-                name="email" 
-                type="email" 
-                placeholder="email@exemplo.com" 
+            <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="email@exemplo.com"
                 required />
             </div>
 
-            <div style={{ marginTop: 12 }}>
+            <div>
             <label htmlFor="senha">Senha:</label><br />
-            <input 
-                id="senha" 
-                name="senha" 
-                type="password" 
-                placeholder="mínimo 6 caracteres" 
-                minLength={6} 
+            <input
+                id="senha"
+                name="senha"
+                type="password"
+                placeholder="mínimo 6 caracteres"
+                minLength={6}
                 required />
             </div>
 
             {actionData?.erro && <p className="erro">{actionData.erro}</p>}
-            
-            <button type="submit" disabled={enviando} style={{ marginTop: 16 }}>
+
+            <div className="acoes-formulario">
+            <button type="submit" disabled={enviando} className="botao-primario">
             {enviando ? "Criando..." : "Criar usuário"}
             </button>
+            </div>
         </Form>
+        </div>
 
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 32 }}>
-                <h2 style={{ margin: 0, fontSize: 16 }}>Usuários ativos</h2>
-                <Link to="/usuarios/excluidos" className="link-acao">
+            <div className="cabecalho-secao">
+                <h2>Usuários ativos</h2>
+                <Link to="/usuarios/excluidos" className="link-acao" title="Ver usuários excluídos">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
                     <path d="M3 3v5h5" />
                     </svg>
+                    Excluídos
                 </Link>
                 </div>
 
+        {usuarios.length === 0 ? (
+        <p className="vazio">Nenhum usuário ativo.</p>
+        ) : (
+        <table>
+            <colgroup>
+                <col style={{ width: "40%" }} />
+                <col style={{ width: "45%" }} />
+                <col style={{ width: "15%" }} />
+            </colgroup>
 
-        <table style={{ marginTop: 24 }}>
             <thead>
             <tr>
                 <th>Nome</th>
                 <th>E-mail</th>
+                <th></th>
             </tr>
 
             </thead>
@@ -130,8 +148,8 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
                 <tr key={u.id}>
                 <td>{u.nome}</td>
                 <td>{u.email}</td>
-               <td>
-                 <div style={{ display: "flex", gap: 4, alignItems: "center", justifyContent: "flex-end" }}>
+               <td className="acoes">
+                 <div>
     {u.id === usuarioLogadoId ? (
       <Link
         to="/minha-senha"
@@ -194,6 +212,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
             ))}
             </tbody>
         </table>
+        )}
 
         <Paginacao pagina={pagina} totalPaginas={totalPaginas} total={total} rotulo="usuários" />
         </div>

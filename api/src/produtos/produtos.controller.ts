@@ -18,9 +18,18 @@ export class ProdutosController{
   @Get()
   findAll(
      @Query('categoria_id') categoriaId?: string,
+     @Query('busca') busca?: string,
+     @Query('em_falta') emFalta?: string,
      @Query('pagina', new ParseIntPipe({ optional: true})) pagina?: number,
+     @Query('por_pagina', new ParseIntPipe({ optional: true})) porPagina?: number,
   ) {
-    return this.produtosService.findAll(categoriaId, pagina ?? 1);
+    return this.produtosService.findAll({
+      categoriaId,
+      busca,
+      emFalta: emFalta === '1' || emFalta === 'true',
+      pagina,
+      porPagina,
+    });
   }
     
   @Get('inativos')

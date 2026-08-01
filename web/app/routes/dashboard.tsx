@@ -50,17 +50,17 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 export default function Dashboard() {
   const { emFalta, valorTotal, ultimasMovimentacoes } = useLoaderData<typeof clientLoader>();
 
-  const cartao = {
-    border: "1px solid var(--border)",
-    borderRadius: 8,
-    padding: 16,
-    flex: 1,
-  };
-
   return (
     <div>
-      <div style={{ display: "flex", gap: 16, marginTop: 16, flexWrap: "wrap" as const }}>
-        <div style={cartao}>
+      <div className="cabecalho-pagina">
+        <h1>Início</h1>
+        <Link to="/movimentacoes/nova" className="botao-primario">
+          + Nova movimentação
+        </Link>
+      </div>
+
+      <div style={{ display: "flex", gap: 16, flexWrap: "wrap" as const }}>
+        <div className="cartao" style={{ flex: 1 }}>
           <div style={{ color: "var(--text-muted)", fontSize: 14 }}>Valor total em estoque:</div>
           <div style={{ fontSize: 28, marginTop: 4 }}>
             R$ {valorTotal.valor_total ?? "0,00"}
@@ -68,8 +68,9 @@ export default function Dashboard() {
         </div>
 
         <div
+          className="cartao"
           style={{
-            ...cartao,
+            flex: 1,
             background: emFalta.total > 0 ? "var(--danger-bg)" : "var(--positive-card)",
             color: emFalta.total > 0 ? "var(--danger-text)" : "inherit",
           }}
@@ -79,9 +80,11 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <h3 style={{ marginTop: 32 }}>Produtos que precisam de reposição:</h3>
+      <div className="cabecalho-secao">
+        <h2>Produtos que precisam de reposição</h2>
+      </div>
       {emFalta.total === 0 ? (
-        <p style={{ color: "var(--text-muted)" }}>Nenhum produto abaixo do mínimo.</p>
+        <p className="vazio">Nenhum produto abaixo do mínimo.</p>
       ) : (
         <table>
        
@@ -106,24 +109,23 @@ export default function Dashboard() {
                 <td>{p.nome}</td>
                 <td className="numero">{p.quantidade_atual}</td>
                 <td className="numero">{p.quantidade_minima}</td>
-                <td>
-                 <Link to=
-                 {`/movimentacoes/nova?produto_id=${p.id}`}
+                <td className="acoes">
+                  <div>
+                    <Link
+                      to={`/movimentacoes/nova?produto_id=${p.id}`}
+                      className="botao-secundario"
                       style={{
-                        background: "transparent",
                         color: "var(--accent-bg)",
-                        border: "1px solid var(--accent-bg)",
-                        padding: "6px 12px ",
-                        borderRadius: 4,
-                        textDecoration: "none",
+                        borderColor: "var(--accent-bg)",
+                        background: "transparent",
                         fontSize: 13,
-
+                        padding: "6px 12px",
                       }}
                     >
                       registrar entrada
                     </Link>
-                
-                  </td>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -138,9 +140,12 @@ export default function Dashboard() {
         param="pagina_falta"
       />
 
-      <h3 style={{ marginTop: 32 }}>Últimas movimentações:</h3>
+      <div className="cabecalho-secao">
+        <h2>Últimas movimentações</h2>
+        <Link to="/movimentacoes" className="link-acao">ver histórico</Link>
+      </div>
       {ultimasMovimentacoes.length === 0 ? (
-        <p style={{ color: "var(--text-muted)" }}>Nenhuma movimentação registrada ainda.</p>
+        <p className="vazio">Nenhuma movimentação registrada ainda.</p>
       ) : (
         <table>
           <thead>
@@ -158,7 +163,9 @@ export default function Dashboard() {
                 <td>{new Date(m.criado_em).toLocaleString("pt-BR")}</td>
                 <td>{m.produtos.nome}</td>
                 <td>{m.tipo === "entrada" ? "Entrada" : "Saída"}</td>
-                <td className="numero">{m.quantidade} {m.produtos.unidade_medida}</td>
+                <td className="numero">
+                  {m.quantidade} <span className="unidade">{m.produtos.unidade_medida}</span>
+                </td>
                 <td>{m.usuarios.nome}</td>
               </tr>
             ))}

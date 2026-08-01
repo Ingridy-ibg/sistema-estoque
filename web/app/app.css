@@ -146,3 +146,213 @@ a[aria-label]:hover {
   color: var(--text);
   background: var(--surface);
 }
+
+/* colunas de valores: alinhadas à direita e com dígitos de largura fixa,
+   para os números baterem na vertical */
+.numero {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* unidade não compete com o número: fica menor e mais apagada,
+   herdando a cor da linha (inclusive a vermelha de "em falta") */
+.unidade {
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+thead th {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+tbody tr:hover:not(.em-falta) {
+  background: var(--surface);
+}
+
+td.acoes > div {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+/* barra de filtros */
+.barra-filtros {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+/* `flex: 1` faz o form ocupar a largura livre da barra; sem isso ele encolhe
+   para o tamanho do conteúdo e quebra a pílula para a linha de baixo */
+.barra-filtros form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+.campo-busca {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1 1 220px;
+  max-width: 320px;
+}
+
+.campo-busca svg {
+  position: absolute;
+  left: 9px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.campo-busca input {
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 30px;
+}
+
+.pilula {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text-muted);
+  font-size: 13px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.pilula:hover {
+  color: var(--text);
+}
+
+.pilula input {
+  width: auto;
+  margin: 0;
+  padding: 0;
+  border: none;
+  accent-color: var(--danger-solid-bg);
+}
+
+.pilula.ativa {
+  border-color: var(--danger-solid-bg);
+  background: var(--danger-bg);
+  color: var(--danger-text);
+}
+
+.resumo {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.vazio {
+  margin-top: 24px;
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--text-muted);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+}
+
+/* estrutura de página: título à esquerda, ação principal à direita */
+.cabecalho-pagina {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.cabecalho-pagina h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.cabecalho-secao {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin: 32px 0 12px;
+}
+
+.cabecalho-secao h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.botao-primario,
+.botao-secundario {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.botao-primario {
+  background: var(--accent-bg);
+  color: var(--accent-text);
+  border: 1px solid var(--accent-bg);
+}
+
+.botao-secundario {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.botao-primario:hover,
+.botao-secundario:hover {
+  opacity: 0.85;
+}
+
+.cartao {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  background: var(--bg);
+}
+
+/* formulários de página inteira: coluna única, largura confortável */
+.formulario {
+  max-width: 420px;
+}
+
+.formulario label {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* cobre os dois arranjos: `.formulario` no próprio <form> e no cartão que o envolve */
+.formulario > div + div,
+.formulario form > div + div {
+  margin-top: 12px;
+}
+
+.acoes-formulario {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
