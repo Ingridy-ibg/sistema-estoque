@@ -15,8 +15,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
     await apiFetch("/usuarios/minha-senha", {
       method: "PATCH",
       body: JSON.stringify({
-        senha_atual: formData.get("senha_atual"),
-        senha_nova: senhaNova,
+        senha_nova: senhaNova
       }),
     });
     return { ok: true };
@@ -37,12 +36,8 @@ export default function MinhaSenha() {
         <h1 style={{ margin: 0, fontSize: 18 }}>Alterar minha senha</h1>
 
         <Form method="post" key={actionData?.ok ? "limpo" : "form"} style={{ marginTop: 24 }}>
-          <div>
-            <label htmlFor="senha_atual" style={{ fontSize: 14 }}>Senha atual</label><br />
-            <input id="senha_atual" name="senha_atual" type="password" placeholder="sua senha atual" required style={{ marginTop: 4 }} />
-          </div>
 
-          <div style={{ marginTop: 16 }}>
+          <div >
             <label htmlFor="senha_nova" style={{ fontSize: 14 }}>Nova senha</label><br />
             <input id="senha_nova" name="senha_nova" type="password" minLength={6} placeholder="mínimo 6 caracteres" required style={{ marginTop: 4 }} />
           </div>

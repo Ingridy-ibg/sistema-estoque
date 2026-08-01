@@ -80,19 +80,7 @@ async reativar(id: number) {
   });
 }
 
-async redefinirSenha(id: number, senhaNova: string, usuarioLogadoId: number) {
-  if (id === usuarioLogadoId) {
-    throw new BadRequestException(
-      'Para alterar sua própria senha, use a opção "Alterar minha senha"',
-    );
-  }
-
-  const usuario = await this.prisma.usuarios.findUnique({ where: { id } });
-
-  if (!usuario || !usuario.ativo) {
-    throw new NotFoundException(`Usuário ${id} não existe`);
-  }
-
+private async definirNovaSenha(id: number, senhaNova: string) {
   const senha_hash = await bcrypt.hash(senhaNova, 10);
 
   await this.prisma.usuarios.update({
@@ -100,30 +88,21 @@ async redefinirSenha(id: number, senhaNova: string, usuarioLogadoId: number) {
     data: { senha_hash },
   });
 
-  return { mensagem: 'Senha redefinida com sucesso' };
+  return { mensagem: 'Senha alterada com sucesso' };
 }
 
-async alterarPropriaSenha(usuarioId: number, senhaAtual: string, senhaNova: string) {
-  const usuario = await this.prisma.usuarios.findUnique({ where: { id: usuarioId } });
+async redefinirSenha(id: number, senhaNova: string, usuarioLogadoId: number) {
+ const usuario = await this.prisma.usuarios.findUnique({ where: { id } });
 
-  if (!usuario) {
-    throw new NotFoundException('Usuário não encontrado');
+  if (!usuario || !usuario.ativo) {
+    throw new NotFoundException(`Usuário ${id} não existe`);
   }
 
-  const senhaConfere = await bcrypt.compare(senhaAtual, usuario.senha_hash);
+  return this.definirNovaSenha(id, senhaNova);
+}
 
-  if (!senhaConfere) {
-    throw new UnauthorizedException('Senha atual incorreta');
-  }
-
-  const senha_hash = await bcrypt.hash(senhaNova, 10);
-
-  await this.prisma.usuarios.update({
-    where: { id: usuarioId },
-    data: { senha_hash },
-  });
-
-  return { mensagem: 'Senha alterada com sucesso' };
+async alterarPropriaSenha(usuarioId: number, senhaNova: string) {
+  return this.definirNovaSenha(usuarioId, senhaNova);
 }
 
 }

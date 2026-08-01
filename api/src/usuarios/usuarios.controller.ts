@@ -15,7 +15,7 @@ export class UsuariosController {
   @Patch('minha-senha')
   alterarPropriaSenha(@Body() dto: AlterarSenhaDto, @Req() request: Request) {
     const usuarioId = (request['usuario'] as { sub: number }).sub;
-    return this.usuariosService.alterarPropriaSenha(usuarioId, dto.senha_atual, dto.senha_nova);
+    return this.usuariosService.alterarPropriaSenha(usuarioId, dto.senha_nova);
   }
     @UseGuards(AdminGuard)
     @Post()
