@@ -94,7 +94,7 @@ export default function Historico() {
               <th>Tipo</th>
               <th className="numero">Quantidade</th>
               <th>Motivo</th>
-              <th>Registrado por</th>
+              <th>Usuário</th>
             </tr>
           </thead>
           <tbody>

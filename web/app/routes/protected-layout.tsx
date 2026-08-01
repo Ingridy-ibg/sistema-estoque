@@ -49,6 +49,7 @@ export default function ProtectedLayout (){
             <div style={{ marginLeft: "auto", display: "flex", gap: 12, alignItems: "center" }}>
               {ehAdmin && <NavLink to="/usuarios" style={linkStyle}>Usuários</NavLink>}
 
+        <NavLink to="/minha-senha" style={linkStyle}>Minha senha</NavLink>
 
               <button
                 onClick={() => {

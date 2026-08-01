@@ -13,6 +13,8 @@ export default [
     route("movimentacoes", "routes/movimentacoes/historico.tsx"),
     route("produtos/excluidos", "routes/produtos/excluidos.tsx"),
     route("usuarios/excluidos", "routes/usuarios/excluidos.tsx"),   
+    route("minha-senha", "routes/minha-senha.tsx"),
+    route("usuarios/:id/senha", "routes/usuarios/alterar-senha.tsx"),
     ]),
     
 

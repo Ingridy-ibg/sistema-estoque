@@ -33,6 +33,14 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
             }),
         });
 
+        if (formData.get("intent") === "redefinir_senha") {
+            await apiFetch(`/usuarios/${formData.get("id")}/senha`, {
+                method: "PATCH",
+                body: JSON.stringify({ senha_nova: formData.get("senha_nova") }),
+            });
+            return { ok: true, mensagem: "Senha redefinida" };
+            }
+
         return { ok: true};
 
     }catch (erro){
@@ -113,32 +121,65 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
                 <tr key={u.id}>
                 <td>{u.nome}</td>
                 <td>{u.email}</td>
-               <td> 
-                {u.id === usuarioLogadoId ? (
-                <span style={{ color: "var(--text-muted)" }}></span>
-            ) : (
-                <Form
-                    method="post"
-                    onSubmit={(e) => {
-                        if (!confirm(`Remover o acesso de "${u.nome}"?`)) e.preventDefault();
-                    }}
-                >
-                    <input type="hidden" name="intent" value="excluir" />
-                    <input type="hidden" name="id" value={u.id} />
-                    <button
-                      type="submit"
-                      style={{
-                        background: "transparent",
-                        color: "var(--danger-solid-bg)",
-                        border: "1px solid var(--danger-solid-bg)",
-                        fontSize: 13,
-                        padding: "4px 10px",
-                      }}
-                    >
-                        excluir
-                    </button>
-                </Form>
-            )}
+               <td>
+                 <div style={{ display: "flex", gap: 4, alignItems: "center", justifyContent: "flex-end" }}>
+    {u.id === usuarioLogadoId ? (
+      <Link
+        to="/minha-senha"
+        title="Alterar minha senha"
+        aria-label="Alterar minha senha"
+        style={{ color: "var(--text-muted)", display: "inline-flex", alignItems: "center", padding: 6 }}
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="4" y="10" width="16" height="11" rx="2" />
+          <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+        </svg>
+      </Link>
+    ) : (
+      <>
+        <Link
+          to={`/usuarios/${u.id}/senha`}
+          title="Redefinir senha"
+          aria-label="Redefinir senha"
+          style={{ color: "var(--text-muted)", display: "inline-flex", alignItems: "center", padding: 6 }}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="4" y="10" width="16" height="11" rx="2" />
+            <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+          </svg>
+        </Link>
+
+        <Form
+          method="post"
+          onSubmit={(e) => {
+            if (!confirm(`Remover o acesso de "${u.nome}"?`)) e.preventDefault();
+          }}
+        >
+          <input type="hidden" name="intent" value="excluir" />
+          <input type="hidden" name="id" value={u.id} />
+          <button
+            type="submit"
+            title="Excluir"
+            aria-label="Excluir"
+            style={{
+              background: "transparent",
+              border: "none",
+              padding: 6,
+              color: "var(--danger-solid-bg)",
+              display: "flex",
+              alignItems: "center",
+              cursor: "pointer",
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z" />
+              <path d="M10 11v6M14 11v6" />
+            </svg>
+          </button>
+        </Form>
+      </>
+    )}
+  </div>
         </td>
                 </tr>
             ))}
