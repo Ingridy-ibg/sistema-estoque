@@ -19,8 +19,9 @@ export class MovimentacoesController {
   findAll(@Query('limite', new ParseIntPipe({ optional: true })) limite?: number,
    @Query('produto_id', new ParseIntPipe({optional: true})) produtoId?: number,
    @Query('periodo') periodo?: string,
+   @Query('pagina', new ParseIntPipe({ optional: true })) pagina?: number,
   ) {
-    return this.movimentacoesService.findAll(limite, produtoId, periodo);
+    return this.movimentacoesService.findAll(limite, produtoId, periodo, pagina);
   }
 
   @Get(':id')

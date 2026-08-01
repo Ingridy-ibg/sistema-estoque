@@ -1,7 +1,8 @@
 import { Injectable, ConflictException, NotFoundException, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateUsuarioDto } from './dto/create-usuario.dto';    
+import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import { calcularPaginacao, PADRAO_POR_PAGINA } from '../common/paginacao';
 
 @Injectable()
 export class UsuariosService {
@@ -29,10 +30,26 @@ export class UsuariosService {
         });
     }
 
-    findAll(){
+    async findAll(pagina = 1, porPagina = PADRAO_POR_PAGINA){
+        const where = { ativo: true };
+        const total = await this.prisma.usuarios.count({ where });
+        const { skip, take, ...paginacao } = calcularPaginacao(total, pagina, porPagina);
+
+        const usuarios = await this.prisma.usuarios.findMany({
+            where,
+            orderBy: {nome: 'asc'},
+            select: { id: true, nome: true, email: true },
+            take,
+            skip,
+        });
+
+        return { usuarios, ...paginacao };
+    }
+
+    listarParaSelecao(){
         return this.prisma.usuarios.findMany({
             where: { ativo: true },
-            orderBy: {nome: 'asc'},
+            orderBy: { nome: 'asc' },
             select: { id: true, nome: true, email: true },
         });
     }

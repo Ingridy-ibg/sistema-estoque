@@ -2,6 +2,7 @@ import { Link, useLoaderData, useSubmit, Form } from "react-router";
 import { apiFetch } from "../../lib/api-client";
 import type { Route } from "./+types/lista";
 import { moeda } from "../../lib/formato";
+import { Paginacao } from "../../components/paginacao";
 
 interface Produto {
   id: number;
@@ -33,17 +34,39 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 export async function clientLoader( { request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
   const categoriaId = url.searchParams.get("categoria_id") ?? "";
+  const pagina = url.searchParams.get("pagina") ?? "1";
 
-  const [produtos, categorias] = await Promise.all([
-    apiFetch(`/produtos${categoriaId ? `?categoria_id=${categoriaId}` : ""}`),
-    apiFetch("/categorias"),
+  const params = new URLSearchParams();
+  if (categoriaId) params.set("categoria_id", categoriaId);
+  params.set("pagina", pagina);
+
+  const [resposta, categorias] = await Promise.all([
+   apiFetch(`/produtos?${params.toString()}`),
+   apiFetch("/categorias/selecao"),
   ]);
-  return { produtos: produtos as Produto[], categorias: categorias as Categoria[], categoriaId };
+
+    const dados = resposta as {
+    produtos: Produto[];
+    total: number;
+    pagina: number;
+    totalPaginas: number;
+  };
+
+
+  return {
+    produtos: dados.produtos,
+    total: dados.total,
+    pagina: dados.pagina,
+    totalPaginas: dados.totalPaginas,
+    categorias: categorias as Categoria[],
+    categoriaId,
+  };
 
 } 
 
 export default function ListaProdutos() {
-  const { produtos, categorias, categoriaId } = useLoaderData<typeof clientLoader>();
+  const { produtos, total, pagina, totalPaginas, categorias, categoriaId } =
+  useLoaderData<typeof clientLoader>();
   const submit = useSubmit();
 
   return (
@@ -67,9 +90,11 @@ export default function ListaProdutos() {
         </div>
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-        <Form method="get" onChange={(e) => submit(e.currentTarget)} style={{ marginTop: 16 }}>
-        <label htmlFor="categoria_id" style={{ fontSize: 14 }}>Filtrar por categoria: </label>
-        <select id="categoria_id" name="categoria_id" defaultValue={categoriaId} style={{ width: "auto" }}>
+
+       <Form method="get" onChange={(e) => submit(e.currentTarget)}>
+          <input type="hidden" name="pagina" value="1" />
+          <label htmlFor="categoria_id">Filtrar por categoria: </label>
+          <select id="categoria_id" name="categoria_id" defaultValue={categoriaId} style={{ width: "auto" }}>
           <option value="">Todas</option>
            <option value="sem">Sem categoria</option>
           {categorias.map((c) => (
@@ -222,6 +247,8 @@ export default function ListaProdutos() {
       </table>
 
       {produtos.length === 0 && <p>Nenhum produto nessa categoria.</p>}
+
+      <Paginacao pagina={pagina} totalPaginas={totalPaginas} total={total} rotulo="produtos" />
 
     </div>
   );

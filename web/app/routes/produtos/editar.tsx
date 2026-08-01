@@ -6,7 +6,7 @@ import type { Route } from "./+types/editar";
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   const [produto, categorias] = await Promise.all([
     apiFetch(`/produtos/${params.id}`),
-    apiFetch("/categorias"),
+    apiFetch("/categorias/selecao"),
   ]);
   return { produto, categorias };
 }

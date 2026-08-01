@@ -1,6 +1,7 @@
 import { useLoaderData, useSubmit, Form } from "react-router";
 import { apiFetch } from "../../lib/api-client";
 import type { Route } from "./+types/historico";
+import { Paginacao } from "../../components/paginacao";
 
 interface Movimentacao {
   id: number;
@@ -25,14 +26,25 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const params = new URLSearchParams();
   if (produtoId) params.set("produto_id", produtoId);
   if (periodo) params.set("periodo", periodo);
+  params.set("pagina", url.searchParams.get("pagina") ?? "1");
 
-  const [movimentacoes, produtos] = await Promise.all([
+  const [resposta, produtos] = await Promise.all([
     apiFetch(`/movimentacoes?${params.toString()}`),
-    apiFetch("/produtos"),
+    apiFetch("/produtos/selecao"),
   ]);
 
+  const dados = resposta as {
+    movimentacoes: Movimentacao[];
+    total: number;
+    pagina: number;
+    totalPaginas: number;
+  };
+
   return {
-    movimentacoes: movimentacoes as Movimentacao[],
+    movimentacoes: dados.movimentacoes,
+    total: dados.total,
+    pagina: dados.pagina,
+    totalPaginas: dados.totalPaginas,
     produtos: produtos as Produto[],
     produtoId,
     periodo,
@@ -40,7 +52,8 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 }
 
 export default function Historico() {
-  const { movimentacoes, produtos, produtoId, periodo } = useLoaderData<typeof clientLoader>();
+  const { movimentacoes, total, pagina, totalPaginas, produtos, produtoId, periodo } =
+    useLoaderData<typeof clientLoader>();
   const submit = useSubmit();
 
   return (
@@ -52,6 +65,8 @@ export default function Historico() {
         onChange={(e) => submit(e.currentTarget)}
         style={{ marginTop: 16, display: "flex", gap: 16, alignItems: "flex-end" }}
       >
+        <input type="hidden" name="pagina" value="1" />
+
         <div>
           <label htmlFor="produto_id">Produto</label><br />
           <select id="produto_id" name="produto_id" defaultValue={produtoId}>
@@ -113,6 +128,13 @@ export default function Historico() {
           </tbody>
         </table>
       )}
+
+      <Paginacao
+        pagina={pagina}
+        totalPaginas={totalPaginas}
+        total={total}
+        rotulo="movimentações"
+      />
     </div>
   );
 }

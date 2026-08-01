@@ -10,7 +10,7 @@ interface Usuario {
 }
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
-    const usuarios: Usuario[] = await apiFetch("/usuarios");
+    const usuarios: Usuario[] = await apiFetch("/usuarios/selecao");
     const usuario = usuarios.find((u) => String(u.id) === params.id);
     
     if(!usuario){

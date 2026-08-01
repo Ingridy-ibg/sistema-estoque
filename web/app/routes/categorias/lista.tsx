@@ -1,6 +1,7 @@
 import { Link, useLoaderData, useActionData, useNavigation, Form } from "react-router";
 import { apiFetch } from "../../lib/api-client";
 import type { Route } from "./+types/lista";
+import { Paginacao } from "../../components/paginacao";
 
 interface Categoria {
   id: number;
@@ -9,9 +10,17 @@ interface Categoria {
   _count: { produtos: number };
 }
 
-export async function clientLoader() {
-  const categorias: Categoria[] = await apiFetch("/categorias");
-  return { categorias };
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
+  const pagina = new URL(request.url).searchParams.get("pagina") ?? "1";
+
+  const dados = (await apiFetch(`/categorias?pagina=${pagina}`)) as {
+    categorias: Categoria[];
+    total: number;
+    pagina: number;
+    totalPaginas: number;
+  };
+
+  return dados;
 }
 
 export async function clientAction({ request }: Route.ClientActionArgs) {
@@ -38,7 +47,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 }
 
 export default function ListaCategorias() {
-  const { categorias } = useLoaderData<typeof clientLoader>();
+  const { categorias, total, pagina, totalPaginas } = useLoaderData<typeof clientLoader>();
   const actionData = useActionData<typeof clientAction>();
   const navigation = useNavigation();
   const enviando = navigation.state === "submitting";
@@ -124,6 +133,8 @@ export default function ListaCategorias() {
           ))}
         </tbody>
       </table>
+
+      <Paginacao pagina={pagina} totalPaginas={totalPaginas} total={total} rotulo="categorias" />
     </div>
   );
 }

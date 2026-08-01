@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, BadRequestException, ConflictException} 
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateProdutoDto } from './dto/create-produto.dto';
 import { UpdateProdutoDto } from './dto/update-produto.dto';
+import { calcularPaginacao, PADRAO_POR_PAGINA } from '../common/paginacao';
 
 @Injectable()
 export class ProdutosService {
@@ -33,7 +34,7 @@ export class ProdutosService {
 
 
 
-  findAll(categoriaId?: string) {
+ async findAll(categoriaId?: string, pagina = 1, porPagina = 20) {
     let where: {ativo:boolean; categoria_id? : number| null } = {ativo: true};
 
     if (categoriaId === 'sem' ) {
@@ -45,12 +46,28 @@ export class ProdutosService {
       }
       where = { ...where, categoria_id: id };
     }
-    return this.prisma.produtos.findMany({
+
+    const total = await this.prisma.produtos.count({ where });
+    const { skip, take, ...paginacao } = calcularPaginacao(total, pagina, porPagina);
+
+    const produtos = await this.prisma.produtos.findMany({
       where,
-      orderBy: { nome: 'asc'} ,
-    include: { categorias: { select: { nome: true } } },
-  });
+      orderBy: { nome: 'asc'},
+      include: { categorias: { select: { nome: true } } },
+      take,
+      skip,
+    });
+
+    return { produtos, ...paginacao };
   }
+
+  listarParaSelecao() {
+  return this.prisma.produtos.findMany({
+    where: { ativo: true },
+    orderBy: { nome: 'asc' },
+    select: { id: true, nome: true, unidade_medida: true, quantidade_atual: true },
+  });
+}
 
   findOne(id: number) {
     return this.prisma.produtos.findUnique({where: {id} });
@@ -101,13 +118,24 @@ export class ProdutosService {
     }
   }
 
-  async findEmFalta(){
-    return this.prisma.$queryRaw`
+  async findEmFalta(pagina = 1, porPagina = PADRAO_POR_PAGINA){
+    const [{ total }] = await this.prisma.$queryRaw<{ total: number }[]>`
+    SELECT COUNT(*)::int AS total
+    FROM produtos
+    WHERE ativo = true AND quantidade_atual < quantidade_minima;
+    `;
+
+    const { skip, take, ...paginacao } = calcularPaginacao(total, pagina, porPagina);
+
+    const produtos = await this.prisma.$queryRaw`
     SELECT id, nome, quantidade_atual, quantidade_minima
     FROM produtos
     WHERE ativo = true AND quantidade_atual < quantidade_minima
-    ORDER BY nome;
+    ORDER BY nome
+    LIMIT ${take} OFFSET ${skip};
     `;
+
+    return { produtos, ...paginacao };
   }
 
   async historico(produtoId: number){

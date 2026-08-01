@@ -1,5 +1,15 @@
 import { Link, useLoaderData } from "react-router";
 import { apiFetch } from "../lib/api-client";
+import type { Route } from "./+types/dashboard";
+import { Paginacao } from "../components/paginacao";
+
+type Pagina<Chave extends string, Item> = {
+  [K in Chave]: Item[];
+} & {
+  total: number;
+  pagina: number;
+  totalPaginas: number;
+};
 
 interface ProdutoEmFalta {
   id: number;
@@ -18,22 +28,27 @@ interface Movimentacao {
   usuarios: { nome: string };
 }
 
-export async function clientLoader() {
+const POR_PAGINA = 5;
+
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
+  const paginaFalta = new URL(request.url).searchParams.get("pagina_falta") ?? "1";
+
   const [emFalta, valorTotal, movimentacoes] = await Promise.all([
-    apiFetch("/produtos/em-falta"),
+    apiFetch(`/produtos/em-falta?pagina=${paginaFalta}&por_pagina=${POR_PAGINA}`),
     apiFetch("/produtos/valor-total"),
-    apiFetch("/movimentacoes?limite=5"),
+    apiFetch(`/movimentacoes?limite=${POR_PAGINA}`),
   ]);
 
   return {
-    emFalta: emFalta as ProdutoEmFalta[],
+    emFalta: emFalta as Pagina<"produtos", ProdutoEmFalta>,
     valorTotal: valorTotal as { valor_total: string | null },
-    movimentacoes: movimentacoes as Movimentacao[],
+    // sem paginação aqui: só as últimas movimentações
+    ultimasMovimentacoes: (movimentacoes as Pagina<"movimentacoes", Movimentacao>).movimentacoes,
   };
 }
 
 export default function Dashboard() {
-  const { emFalta, valorTotal, movimentacoes } = useLoaderData<typeof clientLoader>();
+  const { emFalta, valorTotal, ultimasMovimentacoes } = useLoaderData<typeof clientLoader>();
 
   const cartao = {
     border: "1px solid var(--border)",
@@ -55,17 +70,17 @@ export default function Dashboard() {
         <div
           style={{
             ...cartao,
-            background: emFalta.length > 0 ? "var(--danger-bg)" : "var(--positive-card)",
-            color: emFalta.length > 0 ? "var(--danger-text)" : "inherit",
+            background: emFalta.total > 0 ? "var(--danger-bg)" : "var(--positive-card)",
+            color: emFalta.total > 0 ? "var(--danger-text)" : "inherit",
           }}
         >
           <div style={{ fontSize: 14, opacity: 0.8 }}>Produtos em falta:</div>
-          <div style={{ fontSize: 28, marginTop: 4 }}>{emFalta.length}</div>
+          <div style={{ fontSize: 28, marginTop: 4 }}>{emFalta.total}</div>
         </div>
       </div>
 
       <h3 style={{ marginTop: 32 }}>Produtos que precisam de reposição:</h3>
-      {emFalta.length === 0 ? (
+      {emFalta.total === 0 ? (
         <p style={{ color: "var(--text-muted)" }}>Nenhum produto abaixo do mínimo.</p>
       ) : (
         <table>
@@ -86,7 +101,7 @@ export default function Dashboard() {
             </tr>
           </thead>
           <tbody>
-            {emFalta.map((p) => (
+            {emFalta.produtos.map((p) => (
               <tr key={p.id}>
                 <td>{p.nome}</td>
                 <td className="numero">{p.quantidade_atual}</td>
@@ -115,8 +130,16 @@ export default function Dashboard() {
         </table>
       )}
 
+      <Paginacao
+        pagina={emFalta.pagina}
+        totalPaginas={emFalta.totalPaginas}
+        total={emFalta.total}
+        rotulo="produtos"
+        param="pagina_falta"
+      />
+
       <h3 style={{ marginTop: 32 }}>Últimas movimentações:</h3>
-      {movimentacoes.length === 0 ? (
+      {ultimasMovimentacoes.length === 0 ? (
         <p style={{ color: "var(--text-muted)" }}>Nenhuma movimentação registrada ainda.</p>
       ) : (
         <table>
@@ -130,7 +153,7 @@ export default function Dashboard() {
             </tr>
           </thead>
           <tbody>
-            {movimentacoes.map((m) => (
+            {ultimasMovimentacoes.map((m) => (
               <tr key={m.id}>
                 <td>{new Date(m.criado_em).toLocaleString("pt-BR")}</td>
                 <td>{m.produtos.nome}</td>

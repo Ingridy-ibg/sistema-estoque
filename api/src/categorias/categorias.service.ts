@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
+import { calcularPaginacao, PADRAO_POR_PAGINA } from '../common/paginacao';
 
 @Injectable()
 export class CategoriasService {
@@ -11,16 +12,30 @@ export class CategoriasService {
     return this.prisma.categorias.create({ data: createCategoriaDto });
   }
 
-  findAll() {
-    return this.prisma.categorias.findMany({ 
+  async findAll(pagina = 1, porPagina = PADRAO_POR_PAGINA) {
+    const total = await this.prisma.categorias.count();
+    const { skip, take, ...paginacao } = calcularPaginacao(total, pagina, porPagina);
+
+    const categorias = await this.prisma.categorias.findMany({
       orderBy: {nome: 'asc'},
+      take,
+      skip,
 
         include: {
-           _count: { 
+           _count: {
             select: { produtos: {where: { ativo: true } } } ,
       },
     },
 
+    });
+
+    return { categorias, ...paginacao };
+  }
+
+  listarParaSelecao() {
+    return this.prisma.categorias.findMany({
+      orderBy: { nome: 'asc' },
+      select: { id: true, nome: true },
     });
   }
 

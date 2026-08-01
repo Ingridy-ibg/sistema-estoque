@@ -6,6 +6,7 @@ import { Controller,
    Param, 
    Delete, 
    ParseIntPipe,
+   Query,
    } from '@nestjs/common';
 
 import { CategoriasService } from './categorias.service';
@@ -25,8 +26,16 @@ export class CategoriasController {
   }
 
   @Get()
-  findAll() {
-    return this.categoriasService.findAll();
+  findAll(
+    @Query('pagina', new ParseIntPipe({ optional: true })) pagina?: number,
+    @Query('por_pagina', new ParseIntPipe({ optional: true })) porPagina?: number,
+  ) {
+    return this.categoriasService.findAll(pagina, porPagina);
+  }
+
+  @Get('selecao')
+  listarParaSelecao() {
+    return this.categoriasService.listarParaSelecao();
   }
 
   @Get(':id')

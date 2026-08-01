@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards, Delete, Param, ParseIntPipe, Req, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Delete, Param, ParseIntPipe, Req, Patch, Query } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { RedefinirSenhaDto } from './dto/redefinir-senha.dto';
@@ -25,8 +25,17 @@ export class UsuariosController {
 
     @UseGuards(AdminGuard)
     @Get()
-    findAll() {
-        return this.usuariosService.findAll();
+    findAll(
+        @Query('pagina', new ParseIntPipe({ optional: true })) pagina?: number,
+        @Query('por_pagina', new ParseIntPipe({ optional: true })) porPagina?: number,
+    ) {
+        return this.usuariosService.findAll(pagina, porPagina);
+    }
+
+    @UseGuards(AdminGuard)
+    @Get('selecao')
+    listarParaSelecao() {
+        return this.usuariosService.listarParaSelecao();
     }
 
     @UseGuards(AdminGuard)

@@ -14,7 +14,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
   const produtoIdInicial = url.searchParams.get("produto_id") ?? "";
 
-  const produtos: Produto[] = await apiFetch("/produtos");
+  const produtos: Produto[] = await apiFetch("/produtos/selecao");
   const produtoInicial = produtos.find((p) => String(p.id) === produtoIdInicial);
   return { produtos, produtoIdInicial, buscaInicial: produtoInicial?.nome ?? ""};
 }

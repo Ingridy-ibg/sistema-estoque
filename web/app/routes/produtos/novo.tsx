@@ -5,7 +5,7 @@ import type { Route } from "./+types/novo";
 import { findBotPattern } from "isbot";
 
 export async function clientLoader() {
-  const categorias = await apiFetch("/categorias");
+  const categorias = await apiFetch("/categorias/selecao");
   return { categorias };
 }
 

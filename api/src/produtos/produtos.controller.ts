@@ -18,8 +18,9 @@ export class ProdutosController{
   @Get()
   findAll(
      @Query('categoria_id') categoriaId?: string,
+     @Query('pagina', new ParseIntPipe({ optional: true})) pagina?: number,
   ) {
-    return this.produtosService.findAll(categoriaId);
+    return this.produtosService.findAll(categoriaId, pagina ?? 1);
   }
     
   @Get('inativos')
@@ -28,8 +29,11 @@ export class ProdutosController{
   }
 
   @Get('em-falta')
-  findEmFalta(){
-    return this.produtosService.findEmFalta();
+  findEmFalta(
+    @Query('pagina', new ParseIntPipe({ optional: true })) pagina?: number,
+    @Query('por_pagina', new ParseIntPipe({ optional: true })) porPagina?: number,
+  ){
+    return this.produtosService.findEmFalta(pagina, porPagina);
   }
 
   @Get('valor-total')
@@ -41,6 +45,11 @@ export class ProdutosController{
   historico(@Param('id', ParseIntPipe) id: number){
     return this.produtosService.historico(id);
   }
+
+  @Get('selecao')
+  listarParaSelecao() {
+  return this.produtosService.listarParaSelecao();
+}
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {

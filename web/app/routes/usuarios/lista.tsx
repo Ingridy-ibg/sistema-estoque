@@ -2,6 +2,7 @@ import { useLoaderData, useActionData, useNavigation, Form, Link } from "react-r
 import { apiFetch } from "../../lib/api-client";
 import type { Route } from "./+types/lista";
 import { getUsuarioId } from "../../lib/session";
+import { Paginacao } from "../../components/paginacao";
 
 interface Usuario {
     id: number;
@@ -9,9 +10,17 @@ interface Usuario {
     email: string;
 }
 
-export async function clientLoader(){
-    const usuarios: Usuario[] = await apiFetch("/usuarios");
-    return { usuarios };
+export async function clientLoader({ request }: Route.ClientLoaderArgs){
+    const pagina = new URL(request.url).searchParams.get("pagina") ?? "1";
+
+    const dados = (await apiFetch(`/usuarios?pagina=${pagina}`)) as {
+        usuarios: Usuario[];
+        total: number;
+        pagina: number;
+        totalPaginas: number;
+    };
+
+    return dados;
 }
 
 export async function clientAction({ request }: Route.ClientActionArgs) {
@@ -49,7 +58,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 }
 
     export default function ListaUsuarios() {
-    const { usuarios } = useLoaderData<typeof clientLoader>();
+    const { usuarios, total, pagina, totalPaginas } = useLoaderData<typeof clientLoader>();
     const actionData = useActionData<typeof clientAction>();
     const navigation = useNavigation();
     const enviando = navigation.state === "submitting";
@@ -58,7 +67,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
     return (
         <div>
 
-        <Form method="post" key={usuarios.length} style={{ marginTop: 16 }}>
+        <Form method="post" key={total} style={{ marginTop: 16 }}>
             <div>
             <label htmlFor="nome">Nome:</label><br />
             <input 
@@ -185,6 +194,8 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
             ))}
             </tbody>
         </table>
+
+        <Paginacao pagina={pagina} totalPaginas={totalPaginas} total={total} rotulo="usuários" />
         </div>
     );
     }
