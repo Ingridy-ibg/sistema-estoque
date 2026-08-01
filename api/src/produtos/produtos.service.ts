@@ -24,7 +24,7 @@ export class ProdutosService {
     await this.verificarCategoriaExiste(createProdutoDto.categoria_id);
 
     const ativo = await this.prisma.produtos.findFirst({
-      where: {nome: createProdutoDto.nome, ativo: true},
+      where: { nome: { equals: createProdutoDto.nome, mode: 'insensitive' } , ativo: true},
     });
 
     if (ativo){
