@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateMovimentacoeDto } from './dto/create-movimentacoe.dto';
 import { calcularPaginacao, PADRAO_POR_PAGINA } from '../common/paginacao';
+import { timeoutProvider } from 'rxjs/internal/scheduler/timeoutProvider';
 
 @Injectable()
 export class MovimentacoesService {
@@ -36,17 +37,23 @@ export class MovimentacoesService {
     });
   }
 
-  async findAll(limite?: number, produtoId?: number, periodo?: string, pagina = 1) {
-    const where: { produto_id?: number; criado_em?: { gte: Date } } = {};
+  async findAll(limite?: number, produtoId?: number, periodo?: string, pagina = 1, tipo?: string) {
+    const where: { produto_id?: number; criado_em?: { gte: Date }; tipo?: string } = {};
+    const desde = this.calcularDataInicio(periodo);
 
     if (produtoId){
       where.produto_id = produtoId;
     }
 
-    const desde = this.calcularDataInicio(periodo);
+    
     if (desde){
       where.criado_em = { gte: desde };
     }
+
+    if( tipo === 'entrada' || tipo === 'saida'){
+      where.tipo = tipo;
+    }
+
 
     const total = await this.prisma.movimentacoes.count({ where });
     const { skip, take, ...paginacao } = calcularPaginacao(total, pagina, limite ?? PADRAO_POR_PAGINA);

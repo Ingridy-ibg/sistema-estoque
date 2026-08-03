@@ -52,12 +52,7 @@ export default function Dashboard() {
 
   return (
     <div>
-      <div className="cabecalho-pagina">
-        <h1>Início</h1>
-        <Link to="/movimentacoes/nova" className="botao-primario">
-          + Nova movimentação
-        </Link>
-      </div>
+
 
       <div style={{ display: "flex", gap: 16, flexWrap: "wrap" as const }}>
         <div className="cartao" style={{ flex: 1 }}>

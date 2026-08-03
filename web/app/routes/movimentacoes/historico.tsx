@@ -22,11 +22,14 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
   const produtoId = url.searchParams.get("produto_id") ?? "";
   const periodo = url.searchParams.get("periodo") ?? "hoje";
-
+  const tipo = url.searchParams.get("tipo") ?? "";
   const params = new URLSearchParams();
+
   if (produtoId) params.set("produto_id", produtoId);
   if (periodo) params.set("periodo", periodo);
   params.set("pagina", url.searchParams.get("pagina") ?? "1");
+  if (tipo) params.set("tipo", tipo);
+
 
   const [resposta, produtos] = await Promise.all([
     apiFetch(`/movimentacoes?${params.toString()}`),
@@ -48,11 +51,12 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
     produtos: produtos as Produto[],
     produtoId,
     periodo,
+    tipo,
   };
 }
 
 export default function Historico() {
-  const { movimentacoes, total, pagina, totalPaginas, produtos, produtoId, periodo } =
+  const { movimentacoes, total, pagina, totalPaginas, produtos, produtoId, periodo, tipo } =
     useLoaderData<typeof clientLoader>();
   const submit = useSubmit();
 
@@ -80,6 +84,12 @@ export default function Historico() {
             {produtos.map((p) => (
               <option key={p.id} value={p.id}>{p.nome}</option>
             ))}
+          </select>
+
+          <select name="tipo" defaultValue={tipo} aria-label="Filtrar por tipo" style={{ width: "auto" }}>
+            <option value="">Entradas e saídas</option>
+            <option value="entrada">Só entradas</option>
+            <option value="saida">Só saídas</option>
           </select>
 
           <select
