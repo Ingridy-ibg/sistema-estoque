@@ -20,8 +20,13 @@ export class JwtAuthGuard implements CanActivate {
         });
         request['usuario'] = payload;
 
-    } catch {
-        throw new UnauthorizedException('Token inválido ou expirado');
+    } catch (erro) {
+        // sessão expirada é o caso normal (o token vale 8h) e merece mensagem própria;
+        // qualquer outra falha é token corrompido ou assinado com outro segredo
+        if (erro instanceof Error && erro.name === 'TokenExpiredError') {
+            throw new UnauthorizedException('Sua sessão expirou. Entre novamente.');
+        }
+        throw new UnauthorizedException('Token inválido');
     }
     return true;
 }

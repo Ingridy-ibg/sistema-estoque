@@ -1,19 +1,15 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { PrismaClient } from '../generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { Pool } from 'pg';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
   constructor() {
-    const pool = new Pool({
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        host: process.env.DB_HOST,
-        port: Number(process.env.DB_PORT),
-        database: process.env.DB_NAME,
-        });
-    const adapter = new PrismaPg(pool);
+    // Uma única fonte de configuração: a mesma DATABASE_URL que o CLI do Prisma
+    // usa em prisma.config.ts. Parâmetros como ?sslmode=require viajam na própria
+    // string, que é o formato exigido por provedores gerenciados (Neon, Supabase).
+    // A ausência da variável é barrada no boot, em main.ts.
+    const adapter = new PrismaPg(process.env.DATABASE_URL as string);
     super({ adapter });
   }
     async onModuleInit() {

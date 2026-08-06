@@ -41,15 +41,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
                 senha: formData.get("senha"),
             }),
         });
-
-        if (formData.get("intent") === "redefinir_senha") {
-            await apiFetch(`/usuarios/${formData.get("id")}/senha`, {
-                method: "PATCH",
-                body: JSON.stringify({ senha_nova: formData.get("senha_nova") }),
-            });
-            return { ok: true, mensagem: "Senha redefinida" };
-            }
-
+        
         return { ok: true};
 
     }catch (erro){
