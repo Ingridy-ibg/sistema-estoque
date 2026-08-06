@@ -55,7 +55,7 @@ export default function Dashboard() {
 
 
       <div style={{ display: "flex", gap: 16, flexWrap: "wrap" as const }}>
-        <div className="cartao" style={{ flex: 1 }}>
+        <div className="cartao" style={{ flex: "1 1 220px" }}>
           <div style={{ color: "var(--text-muted)", fontSize: 14 }}>Valor total em estoque:</div>
           <div style={{ fontSize: 28, marginTop: 4 }}>
             R$ {valorTotal.valor_total ?? "0,00"}
@@ -65,7 +65,7 @@ export default function Dashboard() {
         <div
           className="cartao"
           style={{
-            flex: 1,
+            flex: "1 1 220px",
             background: emFalta.total > 0 ? "var(--danger-bg)" : "var(--positive-card)",
             color: emFalta.total > 0 ? "var(--danger-text)" : "inherit",
           }}
@@ -101,9 +101,9 @@ export default function Dashboard() {
           <tbody>
             {emFalta.produtos.map((p) => (
               <tr key={p.id}>
-                <td>{p.nome}</td>
-                <td className="numero">{p.quantidade_atual}</td>
-                <td className="numero">{p.quantidade_minima}</td>
+                <td className="principal">{p.nome}</td>
+                <td className="numero" data-rotulo="Atual">{p.quantidade_atual}</td>
+                <td className="numero" data-rotulo="Mínimo">{p.quantidade_minima}</td>
                 <td className="acoes">
                   <div>
                     <Link
@@ -155,13 +155,15 @@ export default function Dashboard() {
           <tbody>
             {ultimasMovimentacoes.map((m) => (
               <tr key={m.id}>
-                <td>{new Date(m.criado_em).toLocaleString("pt-BR")}</td>
-                <td>{m.produtos.nome}</td>
-                <td>{m.tipo === "entrada" ? "Entrada" : "Saída"}</td>
-                <td className="numero">
-                  {m.quantidade} <span className="unidade">{m.produtos.unidade_medida}</span>
+                <td data-rotulo="Data">{new Date(m.criado_em).toLocaleString("pt-BR")}</td>
+                <td data-rotulo="Produto">{m.produtos.nome}</td>
+                <td data-rotulo="Tipo">{m.tipo === "entrada" ? "Entrada" : "Saída"}</td>
+                <td className="numero" data-rotulo="Quantidade">
+                  <span>
+                    {m.quantidade} <span className="unidade">{m.produtos.unidade_medida}</span>
+                  </span>
                 </td>
-                <td>{m.usuarios.nome}</td>
+                <td data-rotulo="Usuário">{m.usuarios.nome}</td>
               </tr>
             ))}
           </tbody>

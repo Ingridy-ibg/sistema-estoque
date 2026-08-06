@@ -64,8 +64,8 @@ export default function ProdutosExcluidos() {
           <tbody>
             {produtos.map((p) => (
               <tr key={p.id}>
-                <td>{p.nome}</td>
-                <td>{p.categorias?.nome ?? "—"}</td>
+                <td className="principal">{p.nome}</td>
+                <td data-rotulo="Categoria">{p.categorias?.nome ?? "—"}</td>
                 <td className="acoes">
                   <div>
                     <Form method="post">

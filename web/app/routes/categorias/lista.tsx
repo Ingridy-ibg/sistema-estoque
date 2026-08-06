@@ -59,7 +59,7 @@ export default function ListaCategorias() {
       </div>
 
       <div className="cartao">
-        <Form method="post" style={{ display: "flex", gap: 12, alignItems: "flex-end", flexWrap: "wrap" }}>
+        <Form method="post" className="form-categoria" style={{ display: "flex", gap: 12, alignItems: "flex-end", flexWrap: "wrap" }}>
           <div style={{ flex: "1 1 180px" }}>
             <label htmlFor="nome" style={{ fontSize: 13, color: "var(--text-muted)" }}>Nome</label><br />
             <input
@@ -116,9 +116,9 @@ export default function ListaCategorias() {
         <tbody>
           {categorias.map((categoria) => (
             <tr key={categoria.id}>
-              <td><Link to={`/produtos?categoria_id=${categoria.id}`} className="link-discreto">{categoria.nome}</Link></td>
-              <td>{categoria.descricao ?? "—"}</td>
-              <td className="numero">{categoria._count.produtos}</td>
+              <td className="principal"><Link to={`/produtos?categoria_id=${categoria.id}`} className="link-discreto">{categoria.nome}</Link></td>
+              <td data-rotulo="Descrição">{categoria.descricao ?? "—"}</td>
+              <td className="numero" data-rotulo="Produtos">{categoria._count.produtos}</td>
               <td className="acoes">
                 <div>
                 <Form method="post"

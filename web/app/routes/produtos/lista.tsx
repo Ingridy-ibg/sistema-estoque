@@ -120,7 +120,6 @@ export default function ListaProdutos() {
             name="categoria_id"
             defaultValue={categoriaId}
             aria-label="Filtrar por categoria"
-            style={{ width: "auto" }}
           >
             <option value="">Todas as categorias</option>
             <option value="sem">Sem categoria</option>
@@ -206,7 +205,7 @@ export default function ListaProdutos() {
                    emFalta ? "em-falta" : undefined
                 }
               >
-                <td>
+                <td className="principal">
                   <Link
                     to={`/movimentacoes/nova?produto_id=${produto.id}`}
                     className="link-discreto"
@@ -214,13 +213,15 @@ export default function ListaProdutos() {
                     {produto.nome}
                   </Link>
                 </td>
-                <td>{produto.categorias?.nome ?? "—"}</td>
-                <td className="numero">
-                  {produto.quantidade_atual} <span className="unidade">{produto.unidade_medida}</span>
+                <td data-rotulo="Categoria">{produto.categorias?.nome ?? "—"}</td>
+                <td className="numero" data-rotulo="Estoque">
+                  <span>
+                    {produto.quantidade_atual} <span className="unidade">{produto.unidade_medida}</span>
+                  </span>
                 </td>
-                <td className="numero">{produto.quantidade_minima}</td>
-                <td className="numero">{moeda(produto.preco_custo)}</td>
-                <td className="numero">{moeda(produto.preco_venda)}</td>
+                <td className="numero" data-rotulo="Mínimo">{produto.quantidade_minima}</td>
+                <td className="numero" data-rotulo="Custo">{moeda(produto.preco_custo)}</td>
+                <td className="numero" data-rotulo="Venda">{moeda(produto.preco_venda)}</td>
 
                 <td className="acoes">
                   <div>

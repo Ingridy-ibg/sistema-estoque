@@ -10,9 +10,12 @@ interface PaginacaoProps {
   param?: string;
 }
 
+// o padding existe para dar área de toque no mobile — as setas sozinhas
+// ficam bem abaixo do alvo confortável
 const estiloBase = {
-  fontSize: 14,
+  fontSize: 16,
   textDecoration: "none",
+  padding: "8px 16px",
 };
 
 export function Paginacao({ pagina, totalPaginas, total, rotulo, param = "pagina" }: PaginacaoProps) {

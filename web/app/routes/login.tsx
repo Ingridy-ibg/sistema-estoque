@@ -28,7 +28,7 @@ export default function Login(){
     const enviando = navigation.state === "submitting";
 
     return (
-        <div style = {{ maxWidth: 360, margin: "80px auto" }}>
+        <div style = {{ maxWidth: 360, margin: "80px auto", padding: "0 16px" }}>
             <div className="cartao" style={{ padding: 24 }}>
             <h1 style={{ margin: "0 0 20px", fontSize: 20 }}>Estoque</h1>
 

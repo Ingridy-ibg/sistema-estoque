@@ -78,7 +78,6 @@ export default function Historico() {
             name="produto_id"
             defaultValue={produtoId}
             aria-label="Filtrar por produto"
-            style={{ width: "auto" }}
           >
             <option value="">Todos os produtos</option>
             {produtos.map((p) => (
@@ -86,7 +85,7 @@ export default function Historico() {
             ))}
           </select>
 
-          <select name="tipo" defaultValue={tipo} aria-label="Filtrar por tipo" style={{ width: "auto" }}>
+          <select name="tipo" defaultValue={tipo} aria-label="Filtrar por tipo">
             <option value="">Entradas e saídas</option>
             <option value="entrada">Só entradas</option>
             <option value="saida">Só saídas</option>
@@ -97,7 +96,6 @@ export default function Historico() {
             name="periodo"
             defaultValue={periodo}
             aria-label="Filtrar por período"
-            style={{ width: "auto" }}
           >
             <option value="hoje">Hoje</option>
             <option value="semana">Últimos 7 dias</option>
@@ -140,16 +138,21 @@ export default function Historico() {
           <tbody>
             {movimentacoes.map((m) => (
               <tr key={m.id}>
-                <td>{new Date(m.criado_em).toLocaleString("pt-BR")}</td>
-                <td>{m.produtos.nome}</td>
-                <td style={{ color: m.tipo === "entrada" ? "var(--accent-bg)" : "var(--danger-solid-bg)" }}>
+                <td data-rotulo="Data">{new Date(m.criado_em).toLocaleString("pt-BR")}</td>
+                <td data-rotulo="Produto">{m.produtos.nome}</td>
+                <td
+                  data-rotulo="Tipo"
+                  style={{ color: m.tipo === "entrada" ? "var(--accent-bg)" : "var(--danger-solid-bg)" }}
+                >
                   {m.tipo === "entrada" ? "Entrada" : "Saída"}
                 </td>
-                <td className="numero">
-                  {m.quantidade} <span className="unidade">{m.produtos.unidade_medida}</span>
+                <td className="numero" data-rotulo="Quantidade">
+                  <span>
+                    {m.quantidade} <span className="unidade">{m.produtos.unidade_medida}</span>
+                  </span>
                 </td>
-                <td>{m.motivo ?? "—"}</td>
-                <td>{m.usuarios.nome}</td>
+                <td data-rotulo="Motivo">{m.motivo ?? "—"}</td>
+                <td data-rotulo="Usuário">{m.usuarios.nome}</td>
               </tr>
             ))}
           </tbody>

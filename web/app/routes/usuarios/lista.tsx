@@ -138,8 +138,8 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
             <tbody>
             {usuarios.map((u) => (
                 <tr key={u.id}>
-                <td>{u.nome}</td>
-                <td>{u.email}</td>
+                <td className="principal">{u.nome}</td>
+                <td data-rotulo="E-mail">{u.email}</td>
                <td className="acoes">
                  <div>
     {u.id === usuarioLogadoId ? (
